@@ -1,24 +1,45 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+// Material Design UI Components
+import { TextField, Button, List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core/';
+// Material Design Theme
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+//Material Design UI theme
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#000000',
+    }
+  },
+});
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+       <h1>Shopping List</h1>
       </header>
+      <ThemeProvider theme={theme}>
+      <form noValidate autoComplete="off">
+        <TextField id="standard-basic" label="Type in item" />
+      </form>
+        <Button variant="contained" color="primary">
+          Hello World
+        </Button>
+        <List component="nav" aria-label="contacts">
+          <ListItem button>
+            <ListItemIcon>
+              x
+            </ListItemIcon>
+            <ListItemText primary="Chelsea Otakan" />
+          </ListItem>
+          <ListItem button>
+            <ListItemText inset primary="Eric Hoffman" />
+          </ListItem>
+        </List>
+      </ThemeProvider>
     </div>
   );
 }
