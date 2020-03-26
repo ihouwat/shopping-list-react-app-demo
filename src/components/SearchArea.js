@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 // Import Material Design UI Components
 import { TextField, Fab } from '@material-ui/core';
 
-class SearchArea extends Component {
-  render () {
-    return (
-      <div>
-        <Fab color="primary" aria-label="add">
-          +
-        </Fab>
-        <form noValidate autoComplete="off">
-          <TextField id="standard-basic" label="Type in item" />
-        </form>
-      </div>
-    )
-  }
+const SearchArea = ({ searchChange }) => {
+  return (
+    <div>
+      <Fab color="primary" aria-label="add">
+        +
+      </Fab>
+      <form noValidate autoComplete="off">
+        <TextField 
+          id="standard-basic" 
+          label="Add item"
+          onChange = { searchChange }
+        />
+      </form>
+    </div>
+  )
 }
+
 
 export default SearchArea;

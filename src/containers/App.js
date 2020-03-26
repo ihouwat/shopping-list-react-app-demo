@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
 // Import Components
@@ -19,19 +19,35 @@ const theme = createMuiTheme({
   },
 });
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-       <h1>Shopping List</h1>
-      </header>
-      <ThemeProvider theme={theme}>
-        <SearchArea />
-        <GroceryList />
-        <CompletedList />
-      </ThemeProvider>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      searchfield: ''
+    }
+  }
+
+   // Methods
+  onSearchChange = (event) => {
+    this.setState({searchfield: event.target.value})
+    console.log(event.target.value)
+  }
+
+  render () {
+    const { searchfield } = this.state;
+    return (
+      <div className="App">
+        <header className="App-header">
+         <h1>Shopping List</h1>
+        </header>
+        <ThemeProvider theme={theme}>
+          <SearchArea searchChange = {this.onSearchChange}/>
+          <GroceryList />
+          <CompletedList />
+        </ThemeProvider>
+      </div>
+    );
+  }
 }
 
 export default App;
