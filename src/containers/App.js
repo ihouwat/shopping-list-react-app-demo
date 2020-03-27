@@ -23,26 +23,42 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      searchfield: ''
+      formfield: '',
+      item: []
     }
   }
 
    // Methods
-  onSearchChange = (event) => {
-    this.setState({searchfield: event.target.value})
-    console.log(event.target.value)
+  onFormChange = (event) => {
+    this.setState({formfield: event.target.value})
+    // console.log('onFormChange function', event.target.value)
+    console.log('3', this.state.item)
+  }
+
+  onFormSubmit = (event) => {
+    event.preventDefault();
+    if (this.state.formfield === '') {
+      return;
+    }
+    const newItem = this.state.formfield;
+    this.setState({item: this.state.item.concat(newItem)})
+    this.setState({formfield: ''})
   }
 
   render () {
-    const { searchfield } = this.state;
+    const { formfield, item } = this.state;
     return (
       <div className="App">
         <header className="App-header">
          <h1>Shopping List</h1>
         </header>
         <ThemeProvider theme={theme}>
-          <SearchArea searchChange = {this.onSearchChange}/>
-          <GroceryList />
+          <SearchArea 
+            formChange = {this.onFormChange}
+            formSubmit = {this.onFormSubmit}
+            formfield = {formfield}
+          />
+          <GroceryList groceryitem = { item } />
           <CompletedList />
         </ThemeProvider>
       </div>
