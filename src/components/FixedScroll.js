@@ -1,0 +1,11 @@
+import React from 'react';
+
+const FixedScroll = (props) => {
+  return (
+    <div style={{ left: '0', position: 'fixed', right: '0', top: '0', zIndex: '251' }}>
+      {props.children}
+    </div>
+  );
+}
+
+export default FixedScroll;

@@ -1,34 +1,37 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 
 // Import Material Design UI Components
 import { List, ListItem, ListItemText, ListItemIcon, Checkbox } from '@material-ui/core';
 
-class CompletedList extends Component {
-  render() {
+
+const CompletedList = ({ deleteditems }) => {
+  const listItems = deleteditems.map((item, index) => {
     return (
-      <div>
-        <List component="nav" aria-label="contacts">
-          <ListItem button>
-            <ListItemIcon>
-              x
-            </ListItemIcon>
-            <ListItemText primary="Completed" />
-          </ListItem>
-          <ListItem button>
-            <ListItemText inset primary="Completed 2" />
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                tabIndex={-1}
-                disableRipple
-                inputProps={{ 'aria-labelledby': 'item' }}
-              />
-            </ListItemIcon>
-          </ListItem>
-        </List>
-      </div>
+    <ListItem button key={index}>
+      <ListItemText secondary = {item}  />
+      <ListItemIcon >
+        <Checkbox
+          edge="start"
+          tabIndex={-1}
+          disableRipple
+          inputProps={{ 'aria-labelledby': 'checkbox' }}
+        />
+      </ListItemIcon>
+    </ListItem>
     )
-  }
+  })
+
+    if(deleteditems.length === 0) {
+      return null;
+    }
+    return (
+    <Fragment>
+      <h2>Completed Items</h2>
+      <List component="li" aria-label="deleted items">
+        {listItems}
+      </List>
+    </Fragment>
+  )
 }
 
 export default CompletedList;
