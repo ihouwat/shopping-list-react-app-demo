@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Paper, Container, Box } from '@material-ui/core';
-import PopoverMenu from './PopoverMenu';
+import HeaderMenu from './HeaderMenu';
 
 const Header = () => {
   return (
@@ -19,7 +19,7 @@ const Header = () => {
             <Box fontSize={20}>
               <h1>My Shopping List</h1>
             </Box>
-            <PopoverMenu/>
+            <HeaderMenu/>
           </Box>
         </Container>
       </Paper>

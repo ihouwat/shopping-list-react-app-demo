@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 
 // Import Material Design UI Components
-import { TextField } from '@material-ui/core';
+import { TextField, Box } from '@material-ui/core';
 
 const SearchArea = ({ formChange,  formSubmit, formfield }) => {
   return (
     <Fragment>
+     <Box pr={2} pl={2} pb={0.5}>
       <form noValidate autoComplete="off" onSubmit = { formSubmit }>
         <TextField 
           id="standard-basic" 
@@ -15,6 +16,7 @@ const SearchArea = ({ formChange,  formSubmit, formfield }) => {
           fullWidth
         />
       </form>
+     </Box>
     </Fragment>
   )
 }

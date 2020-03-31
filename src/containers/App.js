@@ -8,7 +8,7 @@ import EmptyList from '../components/EmptyList';
 import Header from '../components/Header';
 import FixedScroll from '../components/FixedScroll';
 // Import Material Design UI Custom Theme API
-import { Container, Box } from '@material-ui/core';
+import {  Box } from '@material-ui/core';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // Material Design UI theme
@@ -65,25 +65,25 @@ class App extends Component {
           <FixedScroll>
             <Header />
           </FixedScroll>
-          <Container maxWidth="sm" className="List-area">
-            <Box pt={10} >
-              <SearchArea 
+          <Box pt={11} maxWidth={600} mx={'auto'}>
+            <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
+              <SearchArea
                 formChange = {this.onFormChange}
                 formSubmit = {this.onFormSubmit}
                 formfield = {formfield}
               />
-            </Box>
-            {items.length === 0 && 
-              <EmptyList />
-            }
               <GroceryList 
                 groceryitems = { items } 
                 deleteItem = {this.onDeleteItem}
               />
+            </Box>
+            <Box mr={2} ml={2}>
+              { items.length === 0 && deleteditems.length === 0 && <EmptyList /> }
               <CompletedList 
                 deleteditems = { deleteditems }
               />
-          </Container>
+            </Box>
+          </Box>
         </ThemeProvider>
       </div>
     );

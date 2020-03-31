@@ -2,6 +2,7 @@
   text-align: center;
 }
 
-.List-area {
+.White-container {
   background-color: #ffffff;
+  border-bottom: 1px solid #dadce0;
 }

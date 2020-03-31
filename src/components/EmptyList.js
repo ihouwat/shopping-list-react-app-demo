@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 const EmptyList = () => {
   return (
     <Fragment>
-      Your list is empty.
+      {'Your list is empty.'}
     </Fragment>
   )
 }
