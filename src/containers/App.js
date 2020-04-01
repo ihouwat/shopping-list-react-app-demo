@@ -5,7 +5,7 @@ import SearchArea from '../components/SearchArea';
 import GroceryList from '../components/GroceryList';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
-import Header from '../components/Header';
+import TopNavigation from '../components/TopNavigation';
 import FixedScroll from '../components/FixedScroll';
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
@@ -15,7 +15,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: '#000000',
+      main: 'rgba(0,0,0,.54)',
     }
   },
   spacing: 8,
@@ -27,12 +27,18 @@ class App extends Component {
     this.state = {
       formfield: '',
       items: [],
-      deleteditems: [],
+      completeditems: [],
     }
+    this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
+    this.onRecoverItem = this.onRecoverItem.bind(this);
   }
 
   // Methods
+
+  addNewToGroceries = (item) => {
+    this.setState({items: this.state.items.concat(item)})
+  }
 
   // Listen to search area input
   onFormChange = (event) => {
@@ -50,20 +56,33 @@ class App extends Component {
     this.setState({formfield: ''})
   }
 
-  // Delete grocery item
-  onDeleteItem = (deletedItem) => {
-    this.setState({deleteditems: this.state.deleteditems.concat(deletedItem)});
-    this.setState({items: this.state.items.filter(deleted => deleted !== deletedItem )})
+  // Complete acquiring grocery
+  onCompleteItem = (completedItem) => {
+    this.setState({completeditems: this.state.completeditems.concat(completedItem)});
+    this.setState({items: this.state.items.filter(completed => completed !== completedItem )})
   }
+
+  // Delete item from list
+  onDeleteItem = (deletedItem, list) => {
+    this.setState({[list]: this.state.items.filter(deleted => deleted !== deletedItem)});
+  }
+
+  onRecoverItem = (item) => {
+    this.addNewToGroceries(item)
+    this.setState({completeditems: this.state.completeditems.filter(deleted => deleted !== item)});
+  }
+
 
   // Render
   render () {
-    const { formfield, items, deleteditems } = this.state;
+    const { formfield, items, completeditems } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
           <FixedScroll>
-            <Header />
+            <TopNavigation
+              addFave = {this.addNewToGroceries}
+            />
           </FixedScroll>
           <Box pt={11} maxWidth={600} mx={'auto'}>
             <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
@@ -73,14 +92,17 @@ class App extends Component {
                 formfield = {formfield}
               />
               <GroceryList 
-                groceryitems = { items } 
+                groceryItems = { items } 
+                completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
               />
             </Box>
             <Box mr={2} ml={2}>
-              { items.length === 0 && deleteditems.length === 0 && <EmptyList /> }
+              { items.length === 0 && completeditems.length === 0 && <EmptyList /> }
               <CompletedList 
-                deleteditems = { deleteditems }
+                completedItems = { completeditems }
+                deleteItem = {this.onDeleteItem}
+                recoverItem = {this.onRecoverItem}
               />
             </Box>
           </Box>
