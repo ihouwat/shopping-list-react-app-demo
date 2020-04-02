@@ -7,6 +7,7 @@ import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
 import FixedScroll from '../components/FixedScroll';
+import UncategorizedSnackbar from '../components/UncategorizedSnackbar'
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -28,6 +29,7 @@ class App extends Component {
       formfield: '',
       items: [],
       completeditems: [],
+      snackbarIsOpen: false, 
     }
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
@@ -36,8 +38,20 @@ class App extends Component {
 
   // Methods
 
+  // Generic add grocery method
   addNewToGroceries = (item) => {
     this.setState({items: this.state.items.concat(item)})
+    this.toggleSnackbar(item)
+  }
+
+  // Check for uncategorized items to toggle snackbar warning
+  toggleSnackbar = (item) => {
+    if(item === "AA") {
+      this.setState({snackbarIsOpen: true})
+      setTimeout(() => {
+        this.setState({snackbarIsOpen: false});
+      }, 4000);
+    }
   }
 
   // Listen to search area input
@@ -52,7 +66,7 @@ class App extends Component {
       return;
     }
     const newItem = this.state.formfield.charAt(0).toUpperCase(0) + this.state.formfield.slice(1);
-    this.setState({items: this.state.items.concat(newItem)})
+    this.addNewToGroceries(newItem)
     this.setState({formfield: ''})
   }
 
@@ -67,15 +81,15 @@ class App extends Component {
     this.setState({[list]: this.state.items.filter(deleted => deleted !== deletedItem)});
   }
 
+  // Readd item from completed list to grocery list
   onRecoverItem = (item) => {
     this.addNewToGroceries(item)
     this.setState({completeditems: this.state.completeditems.filter(deleted => deleted !== item)});
   }
 
-
   // Render
   render () {
-    const { formfield, items, completeditems } = this.state;
+    const { formfield, items, completeditems, snackbarIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
@@ -90,6 +104,7 @@ class App extends Component {
                 formChange = {this.onFormChange}
                 formSubmit = {this.onFormSubmit}
                 formfield = {formfield}
+                toggleSnackbar = {this.toggleSnackbar}
               />
               <GroceryList 
                 groceryItems = { items } 
@@ -106,6 +121,10 @@ class App extends Component {
               />
             </Box>
           </Box>
+          {
+            snackbarIsOpen ? <UncategorizedSnackbar/> 
+            : undefined
+          }
         </ThemeProvider>
       </div>
     );

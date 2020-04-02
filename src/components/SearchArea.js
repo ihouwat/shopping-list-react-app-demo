@@ -12,7 +12,7 @@ const SearchArea = ({ formChange,  formSubmit, formfield }) => {
           id="standard-basic" 
           label="Add item"
           onChange = { formChange }
-          value = {formfield}
+          value = { formfield }
           fullWidth
         />
       </form>
