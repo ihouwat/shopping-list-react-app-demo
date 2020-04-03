@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const TopNavigationFaves = ({addFave}) => {
+const TopNavigationFaves = ({addNewToGroceries}) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -72,7 +72,7 @@ const TopNavigationFaves = ({addFave}) => {
                   aria-controls="modal-menu"
                   onClick={handleOpen}
                 >
-                  <SvgIcon onClick={addFave.bind(this, 'favorite item')}>
+                  <SvgIcon onClick={addNewToGroceries.bind(this, 'favorite item')}>
                     <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                   </SvgIcon>
                 </IconButton>

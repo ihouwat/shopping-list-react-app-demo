@@ -34,6 +34,7 @@ class App extends Component {
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
     this.onRecoverItem = this.onRecoverItem.bind(this);
+    this.addNewToGroceries = this.addNewToGroceries.bind(this);
   }
 
   // Methods
@@ -46,11 +47,14 @@ class App extends Component {
 
   // Check for uncategorized items to toggle snackbar warning
   toggleSnackbar = (item) => {
-    if(item === "AA") {
+    if(item === "AA" || item === "Apples") {
       this.setState({snackbarIsOpen: true})
       setTimeout(() => {
         this.setState({snackbarIsOpen: false});
-      }, 4000);
+      }, 3000);
+    }
+    else {
+      this.setState({snackbarIsOpen: false});
     }
   }
 
@@ -78,13 +82,15 @@ class App extends Component {
 
   // Delete item from list
   onDeleteItem = (deletedItem, list) => {
-    this.setState({[list]: this.state.items.filter(deleted => deleted !== deletedItem)});
+    list === 'items' 
+    ? this.setState({items: this.state.items.filter(deleted => deleted !== deletedItem)})
+    : this.setState({completeditems: this.state.completeditems.filter(deleted => deleted !== deletedItem)})
   }
 
   // Readd item from completed list to grocery list
-  onRecoverItem = (item) => {
+  onRecoverItem = (item, list) => {
     this.addNewToGroceries(item)
-    this.setState({completeditems: this.state.completeditems.filter(deleted => deleted !== item)});
+    this.setState({[list]: this.state.completeditems.filter(deleted => deleted !== item)});
   }
 
   // Render
@@ -95,7 +101,7 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <FixedScroll>
             <TopNavigation
-              addFave = {this.addNewToGroceries}
+               addNewToGroceries = {this.addNewToGroceries}
             />
           </FixedScroll>
           <Box pt={11} maxWidth={600} mx={'auto'}>
@@ -122,7 +128,7 @@ class App extends Component {
             </Box>
           </Box>
           {
-            snackbarIsOpen ? <UncategorizedSnackbar/> 
+            snackbarIsOpen ? <UncategorizedSnackbar /> 
             : undefined
           }
         </ThemeProvider>

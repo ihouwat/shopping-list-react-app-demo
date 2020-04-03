@@ -25,8 +25,13 @@ const UncategorizedSnackbar = () => {
         onEnter={handleClick(TransitionUp)}
         onClose={handleClose}
         TransitionComponent={transition}
-        autoHideDuration={4000}
+        autoHideDuration={2500}
         message="Added item is uncategorized."
+        onRequestClose={(reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+      }}
       />
   </div>
   )

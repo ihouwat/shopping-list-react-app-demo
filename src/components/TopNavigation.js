@@ -3,7 +3,7 @@ import { Paper, Container, Box } from '@material-ui/core';
 import TopNavigationCategories from './TopNavigationCategories';
 import TopNavigationFaves from './TopNavigationFaves';
 
-const TopNavigation = ({addFave}) => {
+const TopNavigation = ({addNewToGroceries}) => {
   return (
     <Fragment>
       <Paper elevation={4} square={true}>
@@ -13,7 +13,7 @@ const TopNavigation = ({addFave}) => {
               <h1>My Shopping List</h1>
             </Box>
             <TopNavigationCategories/>
-            <TopNavigationFaves addFave={addFave}/>
+            <TopNavigationFaves addNewToGroceries={addNewToGroceries}/>
           </Box>
         </Container>
       </Paper>
