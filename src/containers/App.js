@@ -34,15 +34,29 @@ class App extends Component {
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
     this.onRecoverItem = this.onRecoverItem.bind(this);
-    this.addNewToGroceries = this.addNewToGroceries.bind(this);
+    this.addToList = this.addToList.bind(this);
+    this.removeFromList = this.removeFromList.bind(this);
   }
 
   // Methods
 
   // Generic add grocery method
-  addNewToGroceries = (item) => {
+  addToList = (item) => {
     this.setState({items: this.state.items.concat(item)})
     this.toggleSnackbar(item)
+  }
+
+  // Generic remove grocery methos
+  removeFromList = (item, list) => {
+    if(list === 'items') {
+      let indexItem = this.state.items.indexOf(item)
+      this.state.items.splice( indexItem, 1 )
+      this.setState({items: this.state.items})
+    } else {
+      let indexItem = this.state.completeditems.indexOf(item)
+      this.state.completeditems.splice( indexItem, 1 )
+      this.setState({completeditems: this.state.completeditems})
+    }
   }
 
   // Check for uncategorized items to toggle snackbar warning
@@ -51,7 +65,7 @@ class App extends Component {
       this.setState({snackbarIsOpen: true})
       setTimeout(() => {
         this.setState({snackbarIsOpen: false});
-      }, 3000);
+      }, 4500);
     }
     else {
       this.setState({snackbarIsOpen: false});
@@ -70,27 +84,25 @@ class App extends Component {
       return;
     }
     const newItem = this.state.formfield.charAt(0).toUpperCase(0) + this.state.formfield.slice(1);
-    this.addNewToGroceries(newItem)
+    this.addToList(newItem)
     this.setState({formfield: ''})
   }
 
-  // Complete acquiring grocery
-  onCompleteItem = (completedItem) => {
-    this.setState({completeditems: this.state.completeditems.concat(completedItem)});
-    this.setState({items: this.state.items.filter(completed => completed !== completedItem )})
+  // Acquire grocery item, move item from active to completed list
+  onCompleteItem = (completedItem, groceryList) => {
+    this.removeFromList(completedItem, groceryList)
+    this.setState({completeditems: this.state.completeditems.concat(completedItem)}); 
   }
 
-  // Delete item from list
+  // Fully delete item from whichever list it is in 
   onDeleteItem = (deletedItem, list) => {
-    list === 'items' 
-    ? this.setState({items: this.state.items.filter(deleted => deleted !== deletedItem)})
-    : this.setState({completeditems: this.state.completeditems.filter(deleted => deleted !== deletedItem)})
+    this.removeFromList(deletedItem, list)
   }
 
   // Readd item from completed list to grocery list
   onRecoverItem = (item, list) => {
-    this.addNewToGroceries(item)
-    this.setState({[list]: this.state.completeditems.filter(deleted => deleted !== item)});
+    this.addToList(item)
+    this.removeFromList(item, list)
   }
 
   // Render
@@ -101,7 +113,8 @@ class App extends Component {
         <ThemeProvider theme={theme}>
           <FixedScroll>
             <TopNavigation
-               addNewToGroceries = {this.addNewToGroceries}
+               addToList = {this.addToList}
+               removeFromList = {this.removeFromList}
             />
           </FixedScroll>
           <Box pt={11} maxWidth={600} mx={'auto'}>
