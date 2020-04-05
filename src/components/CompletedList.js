@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 // Import Material Design UI Components
 import { makeStyles, List, ListItem, ListItemText, ListItemIcon, Typography, ExpansionPanel, ExpansionPanelSummary,ExpansionPanelDetails, IconButton, SvgIcon } from '@material-ui/core';
@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
   },
   summary: {
     padding: '0 16px',
-    marginRight: '27px',
   },
   details: {
     padding: '0',
@@ -27,7 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     width: '100%',
-  }
+  },
+  listItem: {
+    paddingRight: '0',
+  },
 }));
 
 const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
@@ -42,18 +44,18 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
   // Compiling list
   const listItems = completedItems.map((item, index) => {
     return (
-    <ListItem button key={index}>
-      <ListItemText secondary = {item}  />
-      <ListItemIcon>
-        <IconButton inputProps={{ 'aria-labelledby': 'trash' }}>
-          <SvgIcon onClick={deleteItem.bind(this, `${item}`, 'completeditems')}>
+    <ListItem button key={index} className = {classes.listItem}>
+      <ListItemText secondary = {item.name}  />
+      <ListItemIcon onClick={deleteItem.bind(this, item, 'completeditems')}>
+        <IconButton aria-label = 'trash'>
+          <SvgIcon color= 'primary'>
             <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
           </SvgIcon>
         </IconButton>
       </ListItemIcon>
-      <ListItemIcon>
-        <IconButton inputProps={{ 'aria-labelledby': 'trash' }}>
-          <SvgIcon onClick={recoverItem.bind(this, `${item}`, 'completeditems')}>
+      <ListItemIcon onClick={recoverItem.bind(this, item, 'completeditems')}>
+        <IconButton area-label= 'recover'>
+          <SvgIcon>
           <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
           </SvgIcon>
         </IconButton>
@@ -67,10 +69,10 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
     }
     
     return (
-    <Fragment className={classes.root}>
+    <div className={classes.root}>
       <ExpansionPanel className={classes.panel} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <ExpansionPanelSummary
-          expandIcon={'+'}
+          expandIcon={<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>}
           aria-controls="panel1bh-content"
           id="panel1bh-header"
           className={classes.summary}
@@ -83,7 +85,7 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
           </List>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-    </Fragment>
+    </div>
   )
 }
 

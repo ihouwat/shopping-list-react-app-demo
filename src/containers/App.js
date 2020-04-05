@@ -6,6 +6,9 @@ import GroceryList from '../components/GroceryList';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
+import TopNavigationTitle from '../components/TopNavigationTitle';
+import TopNavigationCategories from '../components/TopNavigationCategories';
+import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
 import UncategorizedSnackbar from '../components/UncategorizedSnackbar'
 // Import Material Design UI Custom Theme API
@@ -27,15 +30,18 @@ class App extends Component {
     super(props);
     this.state = {
       formfield: '',
+      itemnotes: '',
       items: [],
       completeditems: [],
       snackbarIsOpen: false, 
+      modalIsOpen: false,
     }
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
     this.onRecoverItem = this.onRecoverItem.bind(this);
     this.addToList = this.addToList.bind(this);
     this.removeFromList = this.removeFromList.bind(this);
+    this.modalClose = this.modalClose.bind(this);
   }
 
   // Methods
@@ -46,22 +52,33 @@ class App extends Component {
     this.toggleSnackbar(item)
   }
 
-  // Generic remove grocery methos
-  removeFromList = (item, list) => {
+  // Generic search list method
+ searchItemList = (item, list) => {
     if(list === 'items') {
-      let indexItem = this.state.items.indexOf(item)
-      this.state.items.splice( indexItem, 1 )
-      this.setState({items: this.state.items})
+      var searchList = this.state.items;
     } else {
-      let indexItem = this.state.completeditems.indexOf(item)
-      this.state.completeditems.splice( indexItem, 1 )
-      this.setState({completeditems: this.state.completeditems})
+      searchList = this.state.completeditems;
     }
+    for(var i=0; i < searchList.length; i++){
+      if (searchList[i].name === item.name){
+        return searchList[i]
+      }
+    } 
   }
 
+  // Generic remove from list method
+  removeFromList = (list, i) => {
+    if(list === "items") {
+      this.state.items.splice( i, 1 );
+      this.setState({items: this.state.items});
+    } else {
+      this.state.completeditems.splice( i, 1 );
+      this.setState({completeditems: this.state.completeditems});
+    }
+  }
   // Check for uncategorized items to toggle snackbar warning
   toggleSnackbar = (item) => {
-    if(item === "AA" || item === "Apples") {
+    if(item.name === "AA" || item.name === "Apples") {
       this.setState({snackbarIsOpen: true})
       setTimeout(() => {
         this.setState({snackbarIsOpen: false});
@@ -77,45 +94,65 @@ class App extends Component {
     this.setState({formfield: event.target.value})
   }
 
+  onAddNote = (event) => {
+    this.setState({itemnotes: event.target.value})
+  }
+
   // On 'enter' add grocery item
   onFormSubmit = (event) => {
     event.preventDefault();
     if (this.state.formfield === '') {
       return;
     }
-    const newItem = this.state.formfield.charAt(0).toUpperCase(0) + this.state.formfield.slice(1);
+    const newItem = {
+      'name': this.state.formfield.charAt(0).toUpperCase(0) + this.state.formfield.slice(1),
+      'note': '',
+    } 
     this.addToList(newItem)
     this.setState({formfield: ''})
   }
 
   // Acquire grocery item, move item from active to completed list
   onCompleteItem = (completedItem, groceryList) => {
-    this.removeFromList(completedItem, groceryList)
+    this.removeFromList(groceryList, this.searchItemList(completedItem, groceryList))
     this.setState({completeditems: this.state.completeditems.concat(completedItem)}); 
   }
 
   // Fully delete item from whichever list it is in 
   onDeleteItem = (deletedItem, list) => {
-    this.removeFromList(deletedItem, list)
+    this.removeFromList(list, this.searchItemList(deletedItem, list) )
   }
 
   // Readd item from completed list to grocery list
   onRecoverItem = (item, list) => {
     this.addToList(item)
-    this.removeFromList(item, list)
+    this.removeFromList(list, this.searchItemList(item, list))
   }
 
+   // Modal functions
+   modalOpen = () => {
+     this.setState({modalIsOpen: true});
+   };
+ 
+   modalClose = (item, list) => {
+    this.setState({modalIsOpen: false});
+    var matchItem = this.searchItemList(item, list)
+    matchItem['note'] = this.state.itemnotes
+    this.setState({formfield: ''})
+  };
+  
   // Render
   render () {
-    const { formfield, items, completeditems, snackbarIsOpen } = this.state;
+    const { formfield, items, completeditems, snackbarIsOpen, itemnotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
           <FixedScroll>
-            <TopNavigation
-               addToList = {this.addToList}
-               removeFromList = {this.removeFromList}
-            />
+            <TopNavigation>
+              <TopNavigationTitle/>
+              <TopNavigationCategories/>
+              <TopNavigationFaves addToList={this.addToList} removeFromList={this.removeFromList}/>
+            </TopNavigation>
           </FixedScroll>
           <Box pt={11} maxWidth={600} mx={'auto'}>
             <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
@@ -126,6 +163,11 @@ class App extends Component {
                 toggleSnackbar = {this.toggleSnackbar}
               />
               <GroceryList 
+                itemnotes = { itemnotes }
+                modalIsOpen = { modalIsOpen }
+                modalClose = { this.modalClose }
+                modalOpen = { this.modalOpen }
+                onAddNote = { this.onAddNote }
                 groceryItems = { items } 
                 completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
