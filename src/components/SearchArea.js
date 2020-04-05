@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 // Import Material Design UI Components
 import { TextField, Box } from '@material-ui/core';
 
-const SearchArea = ({ formChange,  formSubmit, formfield }) => {
+const SearchArea = ({ formChange,  formSubmit, formField }) => {
   return (
     <Fragment>
      <Box pr={2} pl={2} pb={2}>
@@ -12,7 +12,7 @@ const SearchArea = ({ formChange,  formSubmit, formfield }) => {
           id="standard-basic" 
           label="Add item"
           onChange = { formChange }
-          value = { formfield }
+          value = { formField }
           fullWidth
         />
       </form>

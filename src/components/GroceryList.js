@@ -1,6 +1,6 @@
 import React from 'react';
 // Import Material Design UI Components
-import { Typography, TextField, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon, IconButton, SvgIcon } from '@material-ui/core';
+import { TextField, Typography, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon, IconButton, SvgIcon } from '@material-ui/core';
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GroceryList = ({ groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
+const GroceryList = ({ itemNotes, groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
   // Use styles from this file
   const classes = useStyles();
 
@@ -47,7 +47,7 @@ const GroceryList = ({ groceryItems, completeItem, deleteItem, onAddNote, modalC
       <ListItem className={classes.listItem} button key={index}>
         <ListItemText 
           multiline
-          onClick={modalOpen}
+          onClick={modalOpen.bind(this, item, 'items')}
           className={classes.listItemText} 
           primary= {item.name}
           secondary = {item.note}
@@ -83,15 +83,21 @@ const GroceryList = ({ groceryItems, completeItem, deleteItem, onAddNote, modalC
             <Typography variant='h5' paragraph={true} color="textPrimary">
               {item.name}
             </Typography>
-            <form noValidate autoComplete="off">
+            <form>
               <TextField
-                id="filled-multiline-static"
-                label={item.note}
+                id="standard-adornment-weight"
                 multiline
-                rows="4"
-                variant="filled"
+                type='text'
+                variant = "filled"
+                rows="2"
                 fullWidth
+                value={itemNotes}
+                placeholder="Enter note"
                 onChange={ onAddNote }
+                aria-describedby="standard-weight-helper-text"
+                inputProps={{
+                  'aria-label': 'add note',
+                }}
               />
             </form>
           </div>

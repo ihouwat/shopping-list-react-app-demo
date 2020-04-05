@@ -5,7 +5,7 @@ function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
-const UncategorizedSnackbar = () => {
+const UncategorizedItemSnackbar = () => {
   const [open, setOpen] = React.useState(true);
   const [transition, setTransition] = React.useState(undefined);
 
@@ -36,4 +36,4 @@ const UncategorizedSnackbar = () => {
   )
 }
 
-export default UncategorizedSnackbar;
+export default UncategorizedItemSnackbar;

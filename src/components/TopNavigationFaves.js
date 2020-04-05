@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import {IconButton, SvgIcon, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
+import {Checkbox, IconButton, SvgIcon, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
 
 // Modal styles
 const useStyles = makeStyles((theme) => ({
@@ -19,14 +19,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const TopNavigationFaves = ({addToList, removeFromList}) => {
+const TopNavigationFaves = ({handleCheckChildElement, favoriteItems, removeFaveFromList, addFaveToList, }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [active, setActive] = React.useState(true)
 
   const handleOpen = () => {
     setOpen(true);
-  };
+  };  
 
   const handleClose = (event, reason) => {
     if(reason === "backdropClick") {
@@ -37,10 +36,25 @@ const TopNavigationFaves = ({addToList, removeFromList}) => {
 
   const handleToggle = () => {
     setOpen(true)
-    setActive(!active)
   }
 
-  var fave = {'name': 'fave', note: ''}
+  const listFavoriteItems  = favoriteItems.map((item, index) => {
+    return (
+      <List>
+        <ListItem divider key={index}>
+        <ListItemText primary= {item.value}  />
+        <ListItemIcon onClick={handleToggle}>
+        <Checkbox 
+          checked = {item.isChecked}
+          key = {item.id}
+          value = {item.value}
+          onClick={handleCheckChildElement}
+          inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+        />
+        </ListItemIcon>
+        </ListItem>
+      </List>
+  )})
 
   return (
     <Fragment>
@@ -74,43 +88,7 @@ const TopNavigationFaves = ({addToList, removeFromList}) => {
           <Fade in={open}>
             <div className={classes.paper}>
               <h2 id="transition-modal-title">Favorite Items</h2>
-              <List>
-                <ListItem divider key={'1'}>
-                <ListItemText primary= {fave.name}  />
-                <ListItemIcon onClick={handleToggle}>
-                  { 
-                    active 
-                    ?
-                  <IconButton 
-                    onClick={addToList.bind(this, fave)}
-                    disableFocusRipple
-                    size='medium'
-                    color='primary'
-                    aria-haspopup="true"
-                    aria-controls="modal-menu"
-                  >
-                    <SvgIcon >
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                    </SvgIcon>
-                    </IconButton>
-
-                    : 
-                    <IconButton
-                    onClick={removeFromList.bind(this, 'favorite item', 'items')} 
-                    disableFocusRipple
-                    size='medium'
-                    color='primary'
-                    aria-haspopup="true"
-                    aria-controls="modal-menu"
-                    >
-                    <SvgIcon >
-                      <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-                    </SvgIcon>
-                  </IconButton>
-                } 
-                </ListItemIcon>
-                </ListItem>
-              </List>
+                {listFavoriteItems}
             </div>
           </Fade>
         </Modal>
