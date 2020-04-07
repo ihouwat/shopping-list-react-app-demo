@@ -19,7 +19,7 @@ const TopNavigationCategories = () => {
       <IconButton 
           disableFocusRipple
           size='medium'
-          color='primary'
+          color='text'
           aria-haspopup="true"
           aria-controls="simple-menu"
           onClick={handleClick}

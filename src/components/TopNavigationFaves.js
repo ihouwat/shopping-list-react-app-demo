@@ -19,11 +19,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const TopNavigationFaves = ({handleCheckChildElement, favoriteItems, removeFaveFromList, addFaveToList, }) => {
+const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const handleOpen = () => {
+  const handleOpen = (event) => {
+    let myObjects = items;
+    let map = new Set(myObjects.map(el=>el.name));
+    favoriteItems.forEach(item => {
+     if(item.isChecked && !map.has(item.value)) {
+         return item.isChecked = false
+        } else if (!item.isChecked && map.has(item.value)) {
+          return item.isChecked = true
+        } 
+    })
     setOpen(true);
   };  
 
@@ -34,23 +43,19 @@ const TopNavigationFaves = ({handleCheckChildElement, favoriteItems, removeFaveF
     setOpen(false);
   };
 
-  const handleToggle = () => {
-    setOpen(true)
-  }
-
   const listFavoriteItems  = favoriteItems.map((item, index) => {
     return (
-      <List>
+      <List dense>
         <ListItem divider key={index}>
         <ListItemText primary= {item.value}  />
-        <ListItemIcon onClick={handleToggle}>
-        <Checkbox 
-          checked = {item.isChecked}
-          key = {item.id}
-          value = {item.value}
-          onClick={handleCheckChildElement}
-          inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
-        />
+        <ListItemIcon>
+          <Checkbox 
+            checked = {item.isChecked}
+            key = {item.id}
+            value = {item.value}
+            onClick={faveCheckChildElement}
+            inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+          />
         </ListItemIcon>
         </ListItem>
       </List>
@@ -62,7 +67,7 @@ const TopNavigationFaves = ({handleCheckChildElement, favoriteItems, removeFaveF
         <IconButton 
             disableFocusRipple
             size='medium'
-            color='primary'
+            color='text.disabled'
             aria-haspopup="true"
             aria-controls="modal-menu"
             onClick={handleOpen}

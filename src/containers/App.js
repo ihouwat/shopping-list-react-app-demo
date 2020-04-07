@@ -19,8 +19,23 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 const theme = createMuiTheme({
   palette: {
     primary: {
-      main: 'rgba(0,0,0,.54)',
-    }
+      main: '#0040cb',
+      light: '#e7e9fa',
+      dark: '#002bb3',
+      contrastText: '#fff',
+    },
+    secondary: {
+      main: '#cb0040',
+      light: '#fce2e7',
+      dark: '#a3003c',
+      contrastText: '#000'
+    },
+    text: {
+      primary: 'rgba(0, 0, 0, 0.87)',
+      secondary: 'rgba(0, 0, 0, 0.54)',
+      disabled: 'rgba(0, 0, 0, 0.38)',
+      hint: 'rgba(0, 0, 0, 0.38)'
+    },
   },
   spacing: 8,
 });
@@ -34,9 +49,9 @@ class App extends Component {
       items: [],
       completedItems: [],
       favoriteItems: [
-        {id: 1, value: 'Hummus', isChecked: false},
-        {id: 2, value: 'Chocolate Chips', isChecked:false},
-        {id: 3, value: 'Apples', isChecked: false},
+        {value: 'Hummus', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
+        {value: 'Chocolate Chips', isChecked:false, 'id': Math.random().toString(36).substr(2, 9),},
+        {value: 'Apples', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
       ],
       snackbarIsOpen: false, 
       modalIsOpen: false,
@@ -70,7 +85,7 @@ class App extends Component {
     // Search list and return match at index
     for(var i=0; i < searchList.length; i++){
       if (searchList[i].name === item.name){
-        return searchList[i]
+        return searchList.indexOf(searchList[i])
       }
     } return
   }
@@ -126,43 +141,27 @@ class App extends Component {
     this.setState({formField: ''})
   }
 
-  // Add item from Favorite Items list
-  addFaveToList = (item, list) => {
+  faveCheckChildElement = (event) => {
+    let items = this.state.favoriteItems
     let myObjects = this.state.items;
     let map = new Set(myObjects.map(el=>el.name));
-    if (map.has(item)) {
-      return 
-    } else {
-        const newItem = {
-          'name': item,
-          'note': '',
-          'id': Math.random().toString(36).substr(2, 9), // unique ID
-        }
-        this.addToList(newItem)
-      } 
-    }
-
-    // Remove item from Favorite Items list
-    removeFaveFromList = (item, list) => {
-      const searchList = this.state.items
-      for(var i=0; i < searchList.length; i++){
-        if (searchList[i].name === item){
-          this.removeFromList(list, searchList[i])
-        }
-      } 
-    }
-
-    handleCheckChildElement = (event) => {
-      let items = this.state.favoriteItems
-      items.forEach(item => {
-         if (item.value === event.target.value)
-         item.isChecked =  event.target.checked
-         if(item.isChecked === true ) {
-          this.addFaveToList(item.value, 'items')
-         } 
-          this.removeFaveFromList(item.value, 'items')
-      })
-    }
+    items.forEach(item => {
+        if (item.value === event.target.value)
+        item.isChecked =  event.target.checked
+    })
+    items.forEach(item => {
+      if(item.isChecked && !map.has(item.value)) {
+          const newItem = {
+            'name': item.value,
+            'note': '',
+            'id': Math.random().toString(36).substr(2, 9), // unique ID
+          }
+          this.addToList(newItem)
+        } else if (!item.isChecked && map.has(item.value)) {
+          this.removeFromList('items', item.value)
+        } 
+    })
+  }
 
   // Acquire grocery item, move item from active to completed list
   onCompleteItem = (completedItem, groceryList) => {
@@ -177,8 +176,8 @@ class App extends Component {
 
   // Readd item from completed list to grocery list
   onRecoverItem = (item, list) => {
-    this.addToList(item)
     this.removeFromList(list, this.searchForItemInList(item, list))
+    this.addToList(item)
   }
 
    // Modal functions for grocery list component
@@ -223,12 +222,9 @@ class App extends Component {
               <TopNavigationTitle/>
               <TopNavigationCategories/>
               <TopNavigationFaves 
-                addToList={this.addToList} 
-                removeFromList={this.removeFromList}
+                items = {items}
                 favoriteItems = {favoriteItems}
-                addFaveToList = {this.addFaveToList}
-                removeFaveFromList = {this.removeFaveFromList}
-                handleCheckChildElement = {this.handleCheckChildElement}
+                faveCheckChildElement = {this.faveCheckChildElement}
               />
             </TopNavigation>
           </FixedScroll>
