@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GroceryList = ({ itemNotes, groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
+const GroceryList = ({ modalItemName, itemNotes, groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
   // Use styles from this file
   const classes = useStyles();
 
@@ -47,7 +47,7 @@ const GroceryList = ({ itemNotes, groceryItems, completeItem, deleteItem, onAddN
       <ListItem className={classes.listItem} button key={index}>
         <ListItemText 
           multiline
-          onClick={modalOpen.bind(this, item, 'items')}
+          onClick={modalOpen.bind(this, item)}
           className={classes.listItemText} 
           primary= {item.name}
           secondary = {item.note}
@@ -71,7 +71,7 @@ const GroceryList = ({ itemNotes, groceryItems, completeItem, deleteItem, onAddN
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={modalIsOpen}
-        onClose={modalClose.bind(this, item, "items")}
+        onClose={modalClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -81,7 +81,7 @@ const GroceryList = ({ itemNotes, groceryItems, completeItem, deleteItem, onAddN
         <Fade in={modalIsOpen}>
           <div className={classes.paper}>
             <Typography variant='h5' paragraph={true} color="textPrimary">
-              {item.name}
+              {modalItemName}
             </Typography>
             <form>
               <TextField

@@ -25,11 +25,11 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
 
   const handleOpen = (event) => {
     let myObjects = items;
-    let map = new Set(myObjects.map(el=>el.name));
+    let map = new Set(myObjects.map(el=>el.name.toLowerCase()));
     favoriteItems.forEach(item => {
-     if(item.isChecked && !map.has(item.value)) {
+     if(item.isChecked && !map.has(item.value.toLowerCase())) {
          return item.isChecked = false
-        } else if (!item.isChecked && map.has(item.value)) {
+        } else if (!item.isChecked && map.has(item.value.toLowerCase())) {
           return item.isChecked = true
         } 
     })

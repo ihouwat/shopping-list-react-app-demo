@@ -45,16 +45,19 @@ class App extends Component {
     super(props);
     this.state = {
       formField: '',
-      itemNotes: '',
       items: [],
       completedItems: [],
+      category: 'alphabetical',
       favoriteItems: [
         {value: 'Hummus', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
         {value: 'Chocolate Chips', isChecked:false, 'id': Math.random().toString(36).substr(2, 9),},
+        {value: 'Black Beans', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
         {value: 'Apples', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
       ],
       snackbarIsOpen: false, 
       modalIsOpen: false,
+      modalItemName: '',
+      itemNotes: '',
     }
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
@@ -74,7 +77,7 @@ class App extends Component {
     this.toggleSnackbar(item)
   }
 
-  // Generic search for item in a list method - returns the object
+  // Helper method to search for item in a list method - returns the object index
  searchForItemInList = (item, list) => {
    // Determine which list to search, items or completedItems
     if(list === 'items') {
@@ -90,8 +93,8 @@ class App extends Component {
     } return
   }
 
-  // Generic remove from list method
-  // Usually index argument will come from searchForItemInList() method
+  // Helper method to remove item from list
+  // Index argument received from searchForItemInList() method
   removeFromList = (list, index) => {
     if(list === "items") {
       this.state.items.splice( index, 1 );
@@ -102,7 +105,7 @@ class App extends Component {
     }
   }
 
-  // Check for uncategorized items to toggle snackbar warning
+  // Checks for uncategorized items to toggle snackbar warning
   toggleSnackbar = (item) => {
     if(item.name === "AA" || item.name === "Apples") {
       this.setState({snackbarIsOpen: true})
@@ -131,7 +134,7 @@ class App extends Component {
     if (this.state.formField === '') {
       return;
     }
-    // create new object from entered item
+    // Create new object from entered item
     const newItem = {
       'name': this.state.formField.charAt(0).toUpperCase(0) + this.state.formField.slice(1),
       'note': '',
@@ -141,26 +144,39 @@ class App extends Component {
     this.setState({formField: ''})
   }
 
+  // Checks grocery list for matches with favorite items
+  // Toggles checkbox in Favorite Items modal depending on grocery list content
+  // Adds/deletes items to the list
   faveCheckChildElement = (event) => {
-    let items = this.state.favoriteItems
-    let myObjects = this.state.items;
-    let map = new Set(myObjects.map(el=>el.name));
-    items.forEach(item => {
-        if (item.value === event.target.value)
-        item.isChecked =  event.target.checked
+    let favoriteItems = this.state.favoriteItems
+    let stateItems = this.state.items;
+    let map = new Set(stateItems.map(el=>el.name.toLowerCase()));
+    //Toggle checkbox
+    favoriteItems.forEach(item => {
+      if (item.value === event.target.value)
+      item.isChecked =  event.target.checked
     })
-    items.forEach(item => {
-      if(item.isChecked && !map.has(item.value)) {
-          const newItem = {
-            'name': item.value,
-            'note': '',
-            'id': Math.random().toString(36).substr(2, 9), // unique ID
+    
+    //Search grocery list and add/remove items accordingly
+    favoriteItems.forEach(item => {
+      let faveLowerCase = item.value.toLowerCase()
+      if(item.isChecked && !map.has(faveLowerCase)) {
+        const newItem = {
+          'name': item.value,
+          'note': '',
+          'id': Math.random().toString(36).substr(2, 9), // unique ID
+        }
+        this.addToList(newItem)
+      } else if (!item.isChecked && map.has(faveLowerCase)) {
+        for(var i=0; i < this.state.items.length; i++){
+          if (this.state.items[i].name.toLowerCase() === faveLowerCase){
+            var stateCopy = Object.assign({}, this.state);
+            stateCopy.items[i] = Object.assign({}, stateCopy.items[i]);
+            this.removeFromList('items', i)
           }
-          this.addToList(newItem)
-        } else if (!item.isChecked && map.has(item.value)) {
-          this.removeFromList('items', item.value)
         } 
-    })
+      }
+    }) 
   }
 
   // Acquire grocery item, move item from active to completed list
@@ -171,6 +187,7 @@ class App extends Component {
 
   // Fully delete item from whichever list it is in 
   onDeleteItem = (deletedItem, list) => {
+    console.log(deletedItem)
     this.removeFromList(list, this.searchForItemInList(deletedItem, list) )
   }
 
@@ -180,30 +197,32 @@ class App extends Component {
     this.addToList(item)
   }
 
-   // Modal functions for grocery list component
+   // Modal open method for grocery list component
+   // For adding notes to grocery list item
    modalOpen = (item, list) => {
-    // Search list and return match at index
-    for(var i=0; i < this.state.items.length; i++){
-      if (this.state.items[i].name === item.name){
-        var itemIndex = this.state.items.indexOf(this.state.items[i])
+     // Search list and return match at index
+     for(var i=0; i < this.state.items.length; i++){
+       if (this.state.items[i].name === item.name){
         var stateCopy = Object.assign({}, this.state);
-        stateCopy.items[itemIndex] = Object.assign({}, stateCopy.items[itemIndex]);
-        stateCopy.items[itemIndex].note = this.state.items[itemIndex].note;
+        stateCopy.items[i] = Object.assign({}, stateCopy.items[i]);
+        stateCopy.items[i].note = this.state.items[i].note;
         this.setState(stateCopy);
-        this.setState({itemNotes: stateCopy.items[itemIndex].note})
+        this.setState({modalItemName: stateCopy.items[i].name})
+        this.setState({itemNotes: stateCopy.items[i].note})
       }
     } 
     this.setState({modalIsOpen: true});
    };
  
-   modalClose = (item, list) => {
+    // Modal close method for grocery list component
+    // Saves note to state
+   modalClose = () => {
     for(var i=0; i < this.state.items.length; i++){
-      if (this.state.items[i].name === item.name){
-        var itemIndex = this.state.items.indexOf(this.state.items[i])
+      if (this.state.items[i].name === this.state.modalItemName){
         var stateCopy = Object.assign({}, this.state);
         stateCopy.items = stateCopy.items.slice();
-        stateCopy.items[itemIndex] = Object.assign({}, stateCopy.items[itemIndex]);
-        stateCopy.items[itemIndex].note = this.state.itemNotes;
+        stateCopy.items[i] = Object.assign({}, stateCopy.items[i]);
+        stateCopy.items[i].note = this.state.itemNotes;
         this.setState(stateCopy);
         this.setState({itemNotes: ''})
       }
@@ -213,14 +232,14 @@ class App extends Component {
   
   // Render
   render () {
-    const { favoriteItems, formField, items, completedItems, snackbarIsOpen, itemNotes, modalIsOpen } = this.state;
+    const { category, modalItemName, favoriteItems, formField, items, completedItems, snackbarIsOpen, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
           <FixedScroll>
             <TopNavigation>
               <TopNavigationTitle/>
-              <TopNavigationCategories/>
+              <TopNavigationCategories category = {category}/>
               <TopNavigationFaves 
                 items = {items}
                 favoriteItems = {favoriteItems}
@@ -239,6 +258,7 @@ class App extends Component {
               <GroceryList 
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }
+                modalItemName  = { modalItemName }
                 modalClose = { this.modalClose }
                 modalOpen = { this.modalOpen }
                 onAddNote = { this.onAddNote }
