@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Import Material Design UI Components
-import { makeStyles, List, ListItem, ListItemText, ListItemIcon, Typography, ExpansionPanel, ExpansionPanelSummary,ExpansionPanelDetails, IconButton, SvgIcon } from '@material-ui/core';
+import { FormControlLabel, makeStyles, List, ListItem, ListItemText, ListItemIcon, Typography, ExpansionPanel, ExpansionPanelSummary,ExpansionPanelDetails, IconButton, SvgIcon } from '@material-ui/core';
 
 // Expansion Panel styles
 const useStyles = makeStyles((theme) => ({
@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
   details: {
     padding: '0',
     textDecoration: 'line-through',
+    textDecorationColor: theme.palette.text.secondary,
     width: '100%',
   },
   heading: {
@@ -77,6 +78,24 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
           id="panel1bh-header"
           className={classes.summary}
         >
+        <FormControlLabel
+            aria-label="Menu"
+            onClick={(event) => event.stopPropagation()}
+            onFocus={(event) => event.stopPropagation()}
+            control={
+              <IconButton 
+              disableFocusRipple
+              size='medium'
+              color='text'
+              aria-haspopup="true"
+              aria-controls="simple-menu"
+              >
+                <SvgIcon  >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 19 21" width="19px" height="19px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </SvgIcon>
+              </IconButton>
+            }
+          />
           <Typography className={classes.heading}>{completedItems.length} checked off</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails className={classes.details}>

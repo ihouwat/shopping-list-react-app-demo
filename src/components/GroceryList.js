@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     alignItems: 'flex-start',
     justifyContent: 'center',
+    color: theme.palette.text.primary,
   },
   // Modal styles
   modal: {

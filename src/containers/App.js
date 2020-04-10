@@ -32,7 +32,7 @@ const theme = createMuiTheme({
     },
     text: {
       primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.54)',
+      secondary: 'rgba(0, 0, 0, 0.70)',
       disabled: 'rgba(0, 0, 0, 0.38)',
       hint: 'rgba(0, 0, 0, 0.38)'
     },
@@ -41,8 +41,8 @@ const theme = createMuiTheme({
 });
 
 class App extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       formField: '',
       items: [],
@@ -229,6 +229,12 @@ class App extends Component {
     }
     this.setState({modalIsOpen: false}); // Close modal
   };
+
+  // Category menu handle change
+  onCategoryChange = (route) => {
+    this.setState({category: route});
+  }
+
   
   // Render
   render () {
@@ -239,7 +245,10 @@ class App extends Component {
           <FixedScroll>
             <TopNavigation>
               <TopNavigationTitle/>
-              <TopNavigationCategories category = {category}/>
+              <TopNavigationCategories 
+                category = {category}
+                onCategoryChange = {this.onCategoryChange}
+              />
               <TopNavigationFaves 
                 items = {items}
                 favoriteItems = {favoriteItems}
@@ -256,6 +265,7 @@ class App extends Component {
                 toggleSnackbar = {this.toggleSnackbar}
               />
               <GroceryList 
+                category = { category }
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }
                 modalItemName  = { modalItemName }

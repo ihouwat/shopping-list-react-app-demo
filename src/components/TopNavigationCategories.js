@@ -1,45 +1,61 @@
-
 import React, { Fragment } from 'react';
-import {IconButton, SvgIcon, Menu, MenuItem} from '@material-ui/core';
+import TopNavigationCategoryList from './TopNavigationCategoryList';
+import {IconButton, SvgIcon, Menu, Box} from '@material-ui/core';
 
-const TopNavigationCategories = () => {
-  // Functions for categories menu
-  const [anchorEl, setAnchorEl] = React.useState(null);
+class TopNavigationCategories extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        anchorEl: null,
+      }
+    }
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    handleClick = (event) => {
+      this.setState({anchorEl: event.currentTarget});
+    };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    handleClose = () => {
+      this.setState({anchorEl: null});
+    };
 
-  return (
-    <Fragment>
-      <IconButton 
-          disableFocusRipple
-          size='medium'
-          color='text'
-          aria-haspopup="true"
-          aria-controls="simple-menu"
-          onClick={handleClick}
+  render() {
+    const category = this.props.category;
+    const {onCategoryChange} = this.props;
+    const {anchorEl} = this.state;
+    return (
+      <Fragment>
+        <IconButton 
+            disableFocusRipple
+            size='medium'
+            color='text'
+            aria-haspopup="true"
+            aria-controls="simple-menu"
+            onClick={this.handleClick}
+          >
+            <SvgIcon  >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M3 18h6v-2H3v2zM3 6v2h18V6H3zm0 7h12v-2H3v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg>            </SvgIcon>
+          </IconButton>
+        <Menu
+          id="simple-menu"
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={this.handleClose}
+          value={category} 
         >
-          <SvgIcon  >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 19 21" width="19px" height="19px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-          </SvgIcon>
-        </IconButton>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleClose}>Alphabetical</MenuItem>
-        <MenuItem onClick={handleClose}>Categories</MenuItem>
-      </Menu>
-    </Fragment>
-  );
+          <Box
+            width={200}
+          >
+            <TopNavigationCategoryList
+              onCategoryChange= { onCategoryChange }
+              category = { category }
+              handleClose = { this.handleClose }
+            />
+          </Box>
+        </Menu>
+      </Fragment>
+    );
+  }
 }
 
 export default TopNavigationCategories;
