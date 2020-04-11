@@ -1,6 +1,9 @@
 import React from 'react';
+import {categoryStore} from '../groceryStores';
 // Import Material Design UI Components
-import { TextField, Typography, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon, IconButton, SvgIcon } from '@material-ui/core';
+import { TextField, Typography, Modal, Backdrop, Fade, 
+        makeStyles, List, ListItem, ListItemText, ListItemIcon, 
+        IconButton, SvgIcon } from '@material-ui/core';
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
@@ -38,12 +41,68 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const GroceryList = ({ modalItemName, itemNotes, groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
+
+const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, completeItem, deleteItem, onAddNote, modalClose, modalOpen, modalIsOpen }) => {
   // Use styles from this file
   const classes = useStyles();
 
+  // Helper function to sort groceries alphabetically
+  const sortGroceriesAlphabetically = (a, b) => {
+    const itemA = a.name.toUpperCase();
+    const itemB = b.name.toUpperCase();
+    let comparison = 0;
+    if (itemA > itemB) {
+      comparison = 1;
+    } else if (itemA < itemB) {
+      comparison = -1;
+    }
+    return comparison
+  }
+
+
+  let categorizedList = [];
+  const flattenList = () => {
+      for (const i in categorizedList) {
+        if (categorizedList[i][1] in categorizedList) {
+          console.log('its in there')
+        }
+        console.log(categorizedList, 'entire')
+      }
+    }
+    
+  const searchStore = (store, grocery) => {
+    for (const storeCategory of store) {
+      if (storeCategory.items.includes(grocery.name)) {
+        let matchedItem = Object.assign({}, [storeCategory.id, storeCategory.category, grocery.name])
+        categorizedList.push(matchedItem)
+        flattenList()
+      }
+    }
+  }
+
+
+  // Main function that creates a temporary list based on this.state.items
+  const sortGroceries = () => {
+    let tempList = groceryItems.map(el=>el)
+    if (category === "Order Entered") {
+      return tempList
+    }
+    else if  (category === "Alphabetical") {
+      let sortedList = tempList.sort(sortGroceriesAlphabetically)
+      return sortedList
+    }
+    else if  (category === "Categories") {
+      for (const item in tempList) {
+        searchStore(categoryStore, tempList[item])
+      }      
+      return tempList
+    }
+  }
+
+  // Create a sorted list which will be passed to the mapping array below
+  const listToMap = sortGroceries();
   // Map out list items
-  const listItems = groceryItems.map((item, index) => {
+  const listItems = listToMap.map((item, index) => {
     return (
       <ListItem className={classes.listItem} button key={index}>
         <ListItemText 

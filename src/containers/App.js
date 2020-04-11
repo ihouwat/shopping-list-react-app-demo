@@ -47,7 +47,7 @@ class App extends Component {
       formField: '',
       items: [],
       completedItems: [],
-      category: 'alphabetical',
+      category: 'Categories',
       favoriteItems: [
         {value: 'Hummus', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
         {value: 'Chocolate Chips', isChecked:false, 'id': Math.random().toString(36).substr(2, 9),},
@@ -187,7 +187,6 @@ class App extends Component {
 
   // Fully delete item from whichever list it is in 
   onDeleteItem = (deletedItem, list) => {
-    console.log(deletedItem)
     this.removeFromList(list, this.searchForItemInList(deletedItem, list) )
   }
 
