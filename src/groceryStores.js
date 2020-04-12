@@ -13,6 +13,14 @@ export const categoryStore = [
     id: 3,
     category: 'Fridge',
     items: ['Orange Juice', 'Milk', 'Almond Milk', 'Sausages', 'Tofu']
-  }
-]
+  },
+  {
+    id: 4,
+    category: 'Uncategorized Items',
+    items: [],
+  },
+];
+
+export const listOfCategories=['Order Entered','Alphabetical','Categories'];
+
 

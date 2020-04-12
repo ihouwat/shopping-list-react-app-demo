@@ -46,7 +46,7 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
   // Use styles from this file
   const classes = useStyles();
 
-  // Helper function to sort groceries alphabetically
+  // Helper method to sort groceries alphabetically
   const sortGroceriesAlphabetically = (a, b) => {
     const itemA = a.name.toUpperCase();
     const itemB = b.name.toUpperCase();
@@ -59,50 +59,94 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
     return comparison
   }
 
-
-  let categorizedList = [];
-  const flattenList = () => {
-      for (const i in categorizedList) {
-        if (categorizedList[i][1] in categorizedList) {
-          console.log('its in there')
-        }
-        console.log(categorizedList, 'entire')
-      }
-    }
-    
-  const searchStore = (store, grocery) => {
+  // Helper method to search Grocery Store template array for item
+  const searchGroceryStoreTemplate = (store, grocery) => {
     for (const storeCategory of store) {
       if (storeCategory.items.includes(grocery.name)) {
-        let matchedItem = Object.assign({}, [storeCategory.id, storeCategory.category, grocery.name])
-        categorizedList.push(matchedItem)
-        flattenList()
+        let matchedItem = Object.assign({}, [{id: storeCategory.id}, {category: storeCategory.category}, {item: grocery.name}])
+        return matchedItem
       }
     }
   }
 
+  // Helper method to create a temp copy of the grocery store array, with an empty items array
+  const storeDeepCopyfunction = (inArray) => {
+    let outArray, value, key
 
-  // Main function that creates a temporary list based on this.state.items
+      if(typeof inArray !== "object" || inArray === null) {
+        return inArray // Return the value if inArray is not an object
+      }
+
+      // Create an array or object to hold the values
+      outArray = Array.isArray(inArray) ? [] : {}
+
+      for (key in inArray) {
+        value = inArray[key]
+        // Recursively (deep) copy for nested objects, including arrays
+        outArray[key] = (key === 'items') ?  outArray[key] = []
+        : (typeof value === "object" && value !== null && key !== 'items') ? storeDeepCopyfunction(value)
+        : value
+      }
+    return outArray
+  }
+
+  // Helper method to match item with its relevant store category
+  const identifyCategoryInStoreTemplate = (searchedItem, storeTemplate) => {
+    let searchedItemCategory = Object.values(searchedItem[1]).toString()
+    let found = storeTemplate.find(storeTemplate => storeTemplate.category === searchedItemCategory);
+    for (let [key, value] of Object.entries(found)) {
+      if(key === 'id') {
+        return value
+      }
+    }
+  }
+
+  // Main method that creates a temporary list based on this.state.items
   const sortGroceries = () => {
     let tempList = groceryItems.map(el=>el)
     if (category === "Order Entered") {
       return tempList
     }
-    else if  (category === "Alphabetical") {
+    else if(category === "Alphabetical") {
       let sortedList = tempList.sort(sortGroceriesAlphabetically)
       return sortedList
     }
-    else if  (category === "Categories") {
+    else if(category === "Categories") {
+      // Create a copy of the store template
+      const copiedStore = storeDeepCopyfunction(categoryStore) 
       for (const item in tempList) {
-        searchStore(categoryStore, tempList[item])
-      }      
-      return tempList
+        // Find if item from template list in store template
+        let searchedItem = searchGroceryStoreTemplate(categoryStore, tempList[item])
+        if (searchedItem !== undefined){
+          // Match the item with its category ID in store template
+          const matchId = identifyCategoryInStoreTemplate(searchedItem, categoryStore)
+          for (let i in copiedStore){
+            // If match, add the item in the appropriate array index of copiedStore
+            if (copiedStore[i].id === matchId) {
+              copiedStore[i].items.push(tempList[item])
+            }
+          }
+        }
+      }    
+      const ArrayTransform =  (store) => {
+        let categoryArray = []
+        let itemsArray = []
+        for (let [key, value] of Object.entries(store)) {
+          const { category, items } = value
+          categoryArray.push(category)
+          itemsArray.push(items)
+          console.log(categoryArray, itemsArray)
+        }
+      }
+     ArrayTransform(copiedStore)
     }
   }
 
   // Create a sorted list which will be passed to the mapping array below
   const listToMap = sortGroceries();
+
   // Map out list items
-  const listItems = listToMap.map((item, index) => {
+  const listItemsWithoutCategories = listToMap.map((item, index) => {
     return (
       <ListItem className={classes.listItem} button key={index}>
         <ListItemText 
@@ -166,10 +210,16 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
       </ListItem>
     )
   })
+
+  // const listItemsWithCategories = ()
+
   return (
+    category === 'Order Entered' || category === 'Alphabetical' ?
     <List component="li" aria-label="grocery list" className={classes.list}>
-      {listItems}
+      {listItemsWithoutCategories}
     </List>
+    : 
+    "Hello"
   )
 }
 

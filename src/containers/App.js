@@ -47,7 +47,7 @@ class App extends Component {
       formField: '',
       items: [],
       completedItems: [],
-      category: 'Categories',
+      category: 'Alphabetical',
       favoriteItems: [
         {value: 'Hummus', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
         {value: 'Chocolate Chips', isChecked:false, 'id': Math.random().toString(36).substr(2, 9),},

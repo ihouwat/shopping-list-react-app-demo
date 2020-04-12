@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import {Typography, SvgIcon, MenuItem, makeStyles} from '@material-ui/core';
-
-let listOfCategories=['Order Entered','Alphabetical','Categories']
+import {listOfCategories} from '../groceryStores';
 
 const useStyles = makeStyles((theme) => ({
   menuItem: {
@@ -44,7 +43,6 @@ const TopNavigationCategoryList = ({handleClose, category, onCategoryChange}) =>
 
   return (
     <Fragment>
-
       {mapCategories}
     </Fragment>
   )
