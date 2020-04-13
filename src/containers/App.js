@@ -6,6 +6,7 @@ import GroceryList from '../components/GroceryList';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
+import Test from '../components/Test';
 import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategories from '../components/TopNavigationCategories';
 import TopNavigationFaves from '../components/TopNavigationFaves';
@@ -234,6 +235,32 @@ class App extends Component {
     this.setState({category: route});
   }
 
+  categoryStore = {
+    title: "Fresh Thyme Sample",
+    children: [
+
+      {
+        id: 1,
+        category: 'Produce',
+        items: ['Apple', 'Apples', 'Banana','Bananas', 'Grapes']
+      },
+      {
+        id: 2,
+        category: 'Bulk Foods',
+        items: ['Oatmeal', 'Almonds']
+      },
+      {
+        id: 3,
+        category: 'Fridge',
+        items: ['Orange Juice', 'Milk', 'Almond Milk', 'Sausages', 'Tofu']
+      },
+      {
+        id: 4,
+        category: 'Uncategorized Items',
+        items: [],
+      },
+    ]
+  };
   
   // Render
   render () {
@@ -263,7 +290,19 @@ class App extends Component {
                 formField = {formField}
                 toggleSnackbar = {this.toggleSnackbar}
               />
-              <GroceryList 
+              {/* <GroceryList 
+                category = { category }
+                itemNotes = { itemNotes }
+                modalIsOpen = { modalIsOpen }
+                modalItemName  = { modalItemName }
+                modalClose = { this.modalClose }
+                modalOpen = { this.modalOpen }
+                onAddNote = { this.onAddNote }
+                groceryItems = { items } 
+                completeItem = {this.onCompleteItem}
+                deleteItem = {this.onDeleteItem}
+              /> */}
+              <Test
                 category = { category }
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }
