@@ -1,5 +1,5 @@
 import React from 'react';
-import {categoryStore} from '../groceryStores';
+import {freshThymeStore} from '../groceryStores';
 // Import Material Design UI Components
 import { TextField, Typography, Modal, Backdrop, Fade, 
         makeStyles, List, ListItem, ListItemText, ListItemIcon, 
@@ -59,16 +59,6 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
     return comparison
   }
 
-  // Helper method to search Grocery Store template array for item
-  const searchGroceryStoreTemplate = (store, grocery) => {
-    for (const storeCategory of store) {
-      if (storeCategory.items.includes(grocery.name)) {
-        let matchedItem = Object.assign({}, [{id: storeCategory.id}, {category: storeCategory.category}, {item: grocery.name}])
-        return matchedItem
-      }
-    }
-  }
-
   // Helper method to create a temp copy of the grocery store array, with an empty items array
   const storeDeepCopyfunction = (inArray) => {
     let outArray, value, key
@@ -90,19 +80,38 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
     return outArray
   }
 
+  // Helper method to search Grocery Store template array for item
+  const searchGroceryStoreTemplate = (store, grocery) => {
+    for (const storeCategory of store) {
+      if (storeCategory.items.includes(grocery.name)) {
+        // If an item matches one found in the template store, create new array
+        let matchedItem = [];
+        // Matched item array includes an object with store-specific id, category, name 
+        matchedItem.push({
+            id: storeCategory.id,
+            category: storeCategory.category,
+            name: grocery.name
+          });
+      return matchedItem
+      }
+    }
+  }
+
+
   // Helper method to match item with its relevant store category
   const identifyCategoryInStoreTemplate = (searchedItem, storeTemplate) => {
-    let searchedItemCategory = Object.values(searchedItem[1]).toString()
-    let found = storeTemplate.find(storeTemplate => storeTemplate.category === searchedItemCategory);
-    for (let [key, value] of Object.entries(found)) {
-      if(key === 'id') {
+    // Variable to isolate the item category
+    let matchedItemCategory = searchedItem[0].id
+    for (let i = 0; i < storeTemplate.categories.length; i++ ) {
+      if(storeTemplate.categories[i].id === matchedItemCategory){
+        let value = storeTemplate.categories[i].id
         return value
       }
     }
   }
 
   // Main method that creates a temporary list based on this.state.items
-  const sortGroceries = () => {
+  const unsortedGroceries = () => {
     let tempList = groceryItems.map(el=>el)
     if (category === "Order Entered") {
       return tempList
@@ -111,42 +120,43 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
       let sortedList = tempList.sort(sortGroceriesAlphabetically)
       return sortedList
     }
-    else if(category === "Categories") {
-      // Create a copy of the store template
-      const copiedStore = storeDeepCopyfunction(categoryStore) 
-      for (const item in tempList) {
-        // Find if item from template list in store template
-        let searchedItem = searchGroceryStoreTemplate(categoryStore, tempList[item])
-        if (searchedItem !== undefined){
-          // Match the item with its category ID in store template
-          const matchId = identifyCategoryInStoreTemplate(searchedItem, categoryStore)
-          for (let i in copiedStore){
-            // If match, add the item in the appropriate array index of copiedStore
-            if (copiedStore[i].id === matchId) {
-              copiedStore[i].items.push(tempList[item])
-            }
+  }
+  const sortedGroceries = () => {
+    let tempList = groceryItems.map(el=>el)
+    // Create a copy of the store template
+    const copiedStore = storeDeepCopyfunction(freshThymeStore)
+    for (const item in tempList) {
+      // Find if item from template list in store template
+      let searchedItem = searchGroceryStoreTemplate(freshThymeStore.categories, tempList[item])
+      if (searchedItem !== undefined){
+        // Match the item with its category ID in store template
+        const matchId = identifyCategoryInStoreTemplate(searchedItem, freshThymeStore)
+        for (let i in copiedStore.categories){
+          // If match, add the item in the appropriate array index of copiedStore
+          if (copiedStore.categories[i].id === matchId) {
+            copiedStore.categories[i].items.push(tempList[item])
           }
         }
-      }    
-      const ArrayTransform =  (store) => {
-        let categoryArray = []
-        let itemsArray = []
-        for (let [key, value] of Object.entries(store)) {
-          const { category, items } = value
-          categoryArray.push(category)
-          itemsArray.push(items)
-          console.log(categoryArray, itemsArray)
-        }
       }
-     ArrayTransform(copiedStore)
+    }    
+     return copiedStore
     }
-  }
 
   // Create a sorted list which will be passed to the mapping array below
-  const listToMap = sortGroceries();
+  const unsortedListToMap = unsortedGroceries();
+  const sortedListToMap = sortedGroceries();
+
+  // const listItemsWithCategories = sortedListToMap.map(category => {
+  //     return (
+  //       <div>
+  //       <h1>{category.category}</h1>
+  //       {category.items.map(item => <p>{item.name}</p>) }
+  //       </div>
+  //     ) 
+  // })
 
   // Map out list items
-  const listItemsWithoutCategories = listToMap.map((item, index) => {
+  const listItemsWithoutCategories = unsortedListToMap.map((item, index) => {
     return (
       <ListItem className={classes.listItem} button key={index}>
         <ListItemText 
@@ -211,7 +221,7 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
     )
   })
 
-  // const listItemsWithCategories = ()
+ 
 
   return (
     category === 'Order Entered' || category === 'Alphabetical' ?
@@ -219,7 +229,7 @@ const GroceryList = ({ category, modalItemName, itemNotes, groceryItems, complet
       {listItemsWithoutCategories}
     </List>
     : 
-    "Hello"
+    "{listItemsWithCategories}"
   )
 }
 

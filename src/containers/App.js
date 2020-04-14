@@ -238,7 +238,6 @@ class App extends Component {
   categoryStore = {
     title: "Fresh Thyme Sample",
     children: [
-
       {
         id: 1,
         category: 'Produce',
@@ -290,19 +289,7 @@ class App extends Component {
                 formField = {formField}
                 toggleSnackbar = {this.toggleSnackbar}
               />
-              {/* <GroceryList 
-                category = { category }
-                itemNotes = { itemNotes }
-                modalIsOpen = { modalIsOpen }
-                modalItemName  = { modalItemName }
-                modalClose = { this.modalClose }
-                modalOpen = { this.modalOpen }
-                onAddNote = { this.onAddNote }
-                groceryItems = { items } 
-                completeItem = {this.onCompleteItem}
-                deleteItem = {this.onDeleteItem}
-              /> */}
-              <Test
+              <GroceryList 
                 category = { category }
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }
@@ -314,6 +301,18 @@ class App extends Component {
                 completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
               />
+              {/* <Test
+                category = { category }
+                itemNotes = { itemNotes }
+                modalIsOpen = { modalIsOpen }
+                modalItemName  = { modalItemName }
+                modalClose = { this.modalClose }
+                modalOpen = { this.modalOpen }
+                onAddNote = { this.onAddNote }
+                groceryItems = { items } 
+                completeItem = {this.onCompleteItem}
+                deleteItem = {this.onDeleteItem}
+              /> */}
             </Box>
             <Box mr={2} ml={2}>
               { items.length === 0 && completedItems.length === 0 && <EmptyList /> }

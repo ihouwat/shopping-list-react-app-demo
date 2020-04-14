@@ -1,36 +1,40 @@
 import React from "react"
  
-const categoryStore = {
-  title: "Fresh Thyme",
+const freshThymeStore = {
+  name: "Fresh Thyme",
   categories: [
     {
       id: 1,
       category: "Produce",
-      items: ['Apple', 'Bananas']
+      items: [{id: "e727tzk7d", name: "Apple", note: ""}, 
+        {id: "l5wdbzkaw", name: "Bananas", note: ""}
+      ]
     },
     {
-      id: 1,
-      category: "Produce",
-      items: ['Apple', 'Bananas']
+      id: 2,
+      category: "Bulk Foods",
+      items: [{id: "e727tzk7d", name: "Oatmeal", note: ""}, 
+        {id: "l5wdbzkaw", name: "Almonds", note: ""}
+      ]
     },
   ]
 }
  
-function Category({ category }) {
-  const nestedCategories = (category.items || []).map(category => {
+function Category({ categories }) {
+  const categorizedItems = (categories).map(category => {
     return (
       <div>
-      <Category key={category.id} category={category} type="child" />
-      <div>{category.items}</div>
+      <h1>{category.category}</h1>
+      {category.items.map(item => <p>{item.name}</p>) }
       </div>
     ) 
-  })
-  console.log(category.items)
+})
+
+
  
   return (
     <div >
-      <div>{category.category}</div>
-      {nestedCategories}
+      {categorizedItems}
     </div>
   )
 }
@@ -39,15 +43,7 @@ function Category({ category }) {
 function Test() {
   return (
     <div>
-      {
-        categoryStore.categories.map((category) => {
-          return (
-            <div>
-            <Category key={category.id} category={category} />
-            </div>
-          )
-        })
-      }
+    <Category key={freshThymeStore.categories.id} categories={freshThymeStore.categories} />
     </div>
   )
 }
