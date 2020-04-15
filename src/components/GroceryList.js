@@ -7,13 +7,17 @@ import CategorizedListItems from './CategorizedListItems'
 class GroceryList extends Component {
   render() {
     const {...props} = this.props;
-    const {category} = this.props;
+    const {category, groceryItems} = this.props;
     return (
       <Fragment>
-        {category === 'Order Entered' || category === 'Alphabetical' 
-        ? <UncategorizedListItems {...props}/>
-        : <CategorizedListItems {...props}/>
-        }
+        {groceryItems.length > 0 
+          ?
+            category === 'Order Entered' || category === 'Alphabetical' 
+            ? <UncategorizedListItems {...props}/>
+            : <CategorizedListItems {...props}/>
+            
+          : null
+          }
       </Fragment>
     )
   }

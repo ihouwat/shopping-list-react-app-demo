@@ -7,7 +7,7 @@ import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
 import TopNavigationTitle from '../components/TopNavigationTitle';
-import TopNavigationCategories from '../components/TopNavigationCategories';
+import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDisplay';
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
 import UncategorizedItemSnackbar from '../components/UncategorizedItemSnackbar'
@@ -47,7 +47,7 @@ class App extends Component {
       formField: '',
       items: [],
       completedItems: [],
-      category: 'Categories',
+      category: 'Alphabetical',
       favoriteItems: [
         {value: 'Hummus', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
         {value: 'Chocolate Chips', isChecked:false, id: Math.random().toString(36).substr(2, 9),},
@@ -65,6 +65,7 @@ class App extends Component {
     this.addToList = this.addToList.bind(this);
     this.removeFromList = this.removeFromList.bind(this);
     this.modalClose = this.modalClose.bind(this);
+    this.modalOpen = this.modalOpen.bind(this);
   }
 
   // Methods
@@ -74,7 +75,7 @@ class App extends Component {
     // Add item to list
     this.setState({items: this.state.items.concat(item)})
     // Check if the item has no category
-    this.toggleSnackbar(item)
+      this.toggleSnackbar(item)
   }
 
   // Helper method to search for item in a list method - returns the object index
@@ -107,14 +108,17 @@ class App extends Component {
 
   // Checks for uncategorized items to toggle snackbar warning
   toggleSnackbar = (item) => {
-    if(item.name === "AA" || item.name === "Apples") {
-      this.setState({snackbarIsOpen: true})
-      setTimeout(() => {
+    console.log(item)
+    if(this.state.category !== "Alphabetical" || this.state.category !== "Order Entered") {
+      if(item.name === "AA" || item.name === "Apples") {
+        this.setState({snackbarIsOpen: true})
+        setTimeout(() => {
+          this.setState({snackbarIsOpen: false});
+        }, 4500);
+      }
+      else {
         this.setState({snackbarIsOpen: false});
-      }, 4500);
-    }
-    else {
-      this.setState({snackbarIsOpen: false});
+      }
     }
   }
 
@@ -233,32 +237,6 @@ class App extends Component {
   onCategoryChange = (route) => {
     this.setState({category: route});
   }
-
-  categoryStore = {
-    title: "Fresh Thyme Sample",
-    children: [
-      {
-        id: 1,
-        category: 'Produce',
-        items: ['Apple', 'Apples', 'Banana','Bananas', 'Grapes']
-      },
-      {
-        id: 2,
-        category: 'Bulk Foods',
-        items: ['Oatmeal', 'Almonds']
-      },
-      {
-        id: 3,
-        category: 'Fridge',
-        items: ['Orange Juice', 'Milk', 'Almond Milk', 'Sausages', 'Tofu']
-      },
-      {
-        id: 4,
-        category: 'Uncategorized Items',
-        items: [],
-      },
-    ]
-  };
   
   // Render
   render () {
@@ -269,7 +247,7 @@ class App extends Component {
           <FixedScroll>
             <TopNavigation>
               <TopNavigationTitle/>
-              <TopNavigationCategories 
+              <TopNavigationCategoryDisplay 
                 category = {category}
                 onCategoryChange = {this.onCategoryChange}
               />
@@ -300,16 +278,6 @@ class App extends Component {
                 completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
               />
-              <uncategorizedListItems                 category = { category }
-                itemNotes = { itemNotes }
-                modalIsOpen = { modalIsOpen }
-                modalItemName  = { modalItemName }
-                modalClose = { this.modalClose }
-                modalOpen = { this.modalOpen }
-                onAddNote = { this.onAddNote }
-                groceryItems = { items } 
-                completeItem = {this.onCompleteItem}
-                deleteItem = {this.onDeleteItem}/>
             </Box>
             <Box mr={2} ml={2}>
               { items.length === 0 && completedItems.length === 0 && <EmptyList /> }

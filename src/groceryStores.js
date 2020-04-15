@@ -1,29 +1,51 @@
-export const freshThymeStore = {
-  storeName: "Fresh Thyme",
-  storeCategories: [
+export const groceryStores = {
+  stores: [
     {
-      id: 1,
-      category: 'Produce',
-      items: ['Apple', 'Apples', 'Banana','Bananas', 'Grapes']
+      storeName: "Alphabetical"
     },
     {
-      id: 2,
-      category: 'Bulk Foods',
-      items: ['Oatmeal', 'Almonds']
+      storeName: "Order Entered"
     },
     {
-      id: 3,
-      category: 'Fridge',
-      items: ['Orange Juice', 'Milk', 'Almond Milk', 'Sausages', 'Tofu']
+      storeName: "Fresh Thyme",
+      storeCategories: [
+        {
+          storeOrder: 1,
+          category: 'Produce',
+          items: ['Apple', 'Apples', 'Banana','Bananas', 'Grapes', 'Clementines', 'Orange', 'Oranges']
+        },
+        {
+          storeOrder: 2,
+          category: 'Bulk Foods',
+          items: ['Oatmeal', 'Almonds']
+        },
+        {
+          storeOrder: 3,
+          category: 'Fridge',
+          items: ['Orange Juice', 'Milk', 'Almond Milk', 'Sausages', 'Tofu']
+        },
+        {
+          storeOrder: 4,
+          category: 'Uncategorized Items',
+          items: [],
+        },
+      ]
     },
     {
-      id: 4,
-      category: 'Uncategorized Items',
-      items: [],
+      storeName: "Kroger Frandor",
+      storeCategories: [
+        {
+          storeOrder: 1,
+          category: 'Produce',
+          items: ['Apple', 'Apples', 'Banana','Bananas', 'Grapes']
+        },
+        {
+          storeOrder: 2,
+          category: 'Uncategorized Items',
+          items: [],
+        }
+      ]
     },
   ]
 };
-
-export const listOfCategories=['Order Entered','Alphabetical','Categories'];
-
 

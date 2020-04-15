@@ -1,57 +1,29 @@
 import React, {Fragment} from 'react';
-import {freshThymeStore} from '../groceryStores';
+import {groceryStores} from '../groceryStores';
+import ListItemTemplate from './ListItemTemplate';
 // Import Material Design UI Components
-import { TextField, Typography, Modal, Backdrop, Fade, 
-        makeStyles, List, ListItem, ListItemText, ListItemIcon, 
-        IconButton, SvgIcon } from '@material-ui/core';
+import { Typography, makeStyles, List} from '@material-ui/core';
 
 // Material-UI styles
 const useStyles = makeStyles((theme) => ({
   // Category styles
   categoryTitle: {
     borderTop: '1px solid #dadce0',
-    lineHeight: '1.72em',
+    lineHeight: '2em',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     paddingTop: theme.spacing(1.8),
     paddingBottom: theme.spacing(1.8),
     textAlign: 'left',
     fontWeight: '700',
-    fontSize: theme.spacing(2),
-    color: theme.palette.text.secondary,
+    fontSize: theme.spacing(1.5),
+    textTransform: 'uppercase',
+    color: theme.palette.text.disabled,
   },
   // List styles
   list: {
     paddingTop: 0,
     paddingBottom: 0,
-  },
-  listItem: {
-    padding: 0,
-  },
-  listItemText: {
-    marginTop: 0,
-    marginBottom: 0,
-    height: theme.spacing(9),
-    display: 'flex',
-    flexDirection: 'column',
-    paddingLeft: theme.spacing(2),
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    color: theme.palette.text.primary,
-  },
-  // Modal styles
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.spacing(0.5),
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2),
-    width: '100%',
-    maxWidth: 500
   },
 }));
 
@@ -60,18 +32,14 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
   // Use styles from this file
   const classes = useStyles();
 
-
   // Helper method to create a temp copy of the grocery store array, with an empty items array
   const storeDeepCopyfunction = (inArray) => {
     let outArray, value, key
-
       if(typeof inArray !== "object" || inArray === null) {
         return inArray // Return the value if inArray is not an object
       }
-
       // Create an array or object to hold the values
       outArray = Array.isArray(inArray) ? [] : {}
-
       for (key in inArray) {
         value = inArray[key]
         // Recursively (deep) copy for nested objects, including arrays
@@ -90,41 +58,43 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
         let matchedItem = [];
         // Matched item array includes an object with store-specific id, category, name 
         matchedItem.push({
-            id: storeCategory.id,
+            storeOrder: storeCategory.storeOrder,
             category: storeCategory.category,
             name: grocery.name
           });
-      return matchedItem
+        return matchedItem
       }
     }
   }
-
-
+  
   // Helper method to match item with its relevant store category
-  const identifyCategoryInStoreTemplate = (searchedItem, storeTemplate) => {
+  const identifyCategoryInStoreTemplate = (searchedItem, store) => {
     // Variable to isolate the item category
-    let matchedItemCategory = searchedItem[0].id
-    for (let i = 0; i < storeTemplate.storeCategories.length; i++ ) {
-      if(storeTemplate.storeCategories[i].id === matchedItemCategory){
-        let value = storeTemplate.storeCategories[i].id
-        return value
+    let matchedItemCategory = searchedItem[0].storeOrder
+    for (let i = 0; i < store.length; i++ ) {
+      if(store[i].storeOrder === matchedItemCategory){
+        return store[i].storeOrder
       }
     }
   }
 
   const sortedGroceries = () => {
+    // Change current store by listening to state changes of 'category' from top-level App.js
+    let currentStoreIndex = groceryStores.stores.findIndex((store, index) => store.storeName === category)
+    let currentStore = groceryStores.stores[currentStoreIndex]
+    // Create a temporary list of the groceryItems coming from top-level App.js
     let tempList = groceryItems.map(el=>el)
     // Create a copy of the store template
-    const copiedStore = storeDeepCopyfunction(freshThymeStore)
+    const copiedStore = storeDeepCopyfunction(currentStore)
     for (const item in tempList) {
       // Find if item from template list in store template
-      let searchedItem = searchGroceryStoreTemplate(freshThymeStore.storeCategories, tempList[item])
+      let searchedItem = searchGroceryStoreTemplate(currentStore.storeCategories, tempList[item])
       if (searchedItem !== undefined){
-        // Match the item with its category ID in store template
-        const matchId = identifyCategoryInStoreTemplate(searchedItem, freshThymeStore)
+        // Match the item with its category storeOrder in current store template
+        const matchId = identifyCategoryInStoreTemplate(searchedItem, currentStore.storeCategories)
         for (let i in copiedStore.storeCategories){
           // If match, add the item in the appropriate array index of copiedStore
-          if (copiedStore.storeCategories[i].id === matchId) {
+          if (copiedStore.storeCategories[i].storeOrder === matchId) {
             copiedStore.storeCategories[i].items.push(tempList[item])
           }
         }
@@ -136,8 +106,8 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
         uncategorizedIndex.items.push(tempList[item])
       }
     }    
-     return copiedStore
-    }
+    return copiedStore
+  }
 
   // Create a sorted list which will be passed to the mapping array below
   const listToMap = sortedGroceries();
@@ -153,66 +123,18 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
       }
       {category.items.map((item, index) => {
           return (
-            <ListItem className={classes.listItem} button key={index}>
-              <ListItemText 
-                multiline
-                onClick={modalOpen.bind(this, item)}
-                className={classes.listItemText} 
-                primary= {item.name}
-                secondary = {item.note}
-              /> 
-              <ListItemIcon onClick={deleteItem.bind(this, item, 'items')}>
-                <IconButton aria-label = 'trash' >
-                  <SvgIcon>
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-                  </SvgIcon>
-                </IconButton>
-              </ListItemIcon>
-              <ListItemIcon onClick={completeItem.bind(this, item, 'items')}>
-                <IconButton aria-label = 'done'>
-                  <SvgIcon >
-                    <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>
-                  </SvgIcon>
-                </IconButton>
-              </ListItemIcon>
-            <Modal
-              aria-labelledby="transition-modal-title"
-              aria-describedby="transition-modal-description"
-              className={classes.modal}
-              open={modalIsOpen}
-              onClose={modalClose}
-              closeAfterTransition
-              BackdropComponent={Backdrop}
-              BackdropProps={{
-                timeout: 500,
-              }}
-            >
-              <Fade in={modalIsOpen}>
-                <div className={classes.paper}>
-                  <Typography variant='h5' paragraph={true} color="textPrimary">
-                    {modalItemName}
-                  </Typography>
-                  <form>
-                    <TextField
-                      id="standard-adornment-weight"
-                      multiline
-                      type='text'
-                      variant = "filled"
-                      rows="2"
-                      fullWidth
-                      value={itemNotes}
-                      placeholder="Enter note"
-                      onChange={ onAddNote }
-                      aria-describedby="standard-weight-helper-text"
-                      inputProps={{
-                        'aria-label': 'add note',
-                      }}
-                    />
-                  </form>
-                </div>
-                </Fade>
-              </Modal>
-            </ListItem>
+            <ListItemTemplate 
+              key={index}
+              item={item}
+              modalClose={modalClose}
+              modalItemName={modalItemName}
+              modalOpen={modalOpen}
+              deleteItem={deleteItem}
+              completeItem={completeItem}
+              modalIsOpen={modalIsOpen}
+              itemNotes={itemNotes}
+              onAddNote={onAddNote}
+            />
           )
         })}
       </Fragment>

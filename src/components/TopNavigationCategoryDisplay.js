@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import TopNavigationCategoryList from './TopNavigationCategoryList';
 import {IconButton, SvgIcon, Menu, Box} from '@material-ui/core';
 
-class TopNavigationCategories extends React.Component {
+class TopNavigationCategoryDisplay extends Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -58,4 +58,4 @@ class TopNavigationCategories extends React.Component {
   }
 }
 
-export default TopNavigationCategories;
+export default TopNavigationCategoryDisplay;
