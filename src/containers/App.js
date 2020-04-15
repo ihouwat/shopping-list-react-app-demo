@@ -6,7 +6,6 @@ import GroceryList from '../components/GroceryList';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
-import Test from '../components/Test';
 import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategories from '../components/TopNavigationCategories';
 import TopNavigationFaves from '../components/TopNavigationFaves';
@@ -48,12 +47,12 @@ class App extends Component {
       formField: '',
       items: [],
       completedItems: [],
-      category: 'Alphabetical',
+      category: 'Categories',
       favoriteItems: [
-        {value: 'Hummus', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
-        {value: 'Chocolate Chips', isChecked:false, 'id': Math.random().toString(36).substr(2, 9),},
-        {value: 'Black Beans', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
-        {value: 'Apples', isChecked: false, 'id': Math.random().toString(36).substr(2, 9),},
+        {value: 'Hummus', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
+        {value: 'Chocolate Chips', isChecked:false, id: Math.random().toString(36).substr(2, 9),},
+        {value: 'Black Beans', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
+        {value: 'Apples', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
       ],
       snackbarIsOpen: false, 
       modalIsOpen: false,
@@ -301,8 +300,7 @@ class App extends Component {
                 completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
               />
-              {/* <Test
-                category = { category }
+              <uncategorizedListItems                 category = { category }
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }
                 modalItemName  = { modalItemName }
@@ -311,8 +309,7 @@ class App extends Component {
                 onAddNote = { this.onAddNote }
                 groceryItems = { items } 
                 completeItem = {this.onCompleteItem}
-                deleteItem = {this.onDeleteItem}
-              /> */}
+                deleteItem = {this.onDeleteItem}/>
             </Box>
             <Box mr={2} ml={2}>
               { items.length === 0 && completedItems.length === 0 && <EmptyList /> }

@@ -1,6 +1,6 @@
 export const freshThymeStore = {
-  name: "Fresh Thyme",
-  categories: [
+  storeName: "Fresh Thyme",
+  storeCategories: [
     {
       id: 1,
       category: 'Produce',
