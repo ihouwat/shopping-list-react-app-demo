@@ -1,7 +1,8 @@
 import React from 'react';
+import DeleteOrRecoverCompleted from './DeleteOrRecoverCompleted';
 
 // Import Material Design UI Components
-import { FormControlLabel, makeStyles, List, ListItem, ListItemText, ListItemIcon, Typography, ExpansionPanel, ExpansionPanelSummary,ExpansionPanelDetails, IconButton, SvgIcon } from '@material-ui/core';
+import { Box, makeStyles, List, ListItem, ListItemText, ListItemIcon, Typography, ExpansionPanel, ExpansionPanelSummary,ExpansionPanelDetails, IconButton, SvgIcon } from '@material-ui/core';
 
 // Expansion Panel styles
 const useStyles = makeStyles((theme) => ({
@@ -11,6 +12,11 @@ const useStyles = makeStyles((theme) => ({
   panel: {
     boxShadow: 'none',
     backgroundColor: '#fafafa',
+    display: 'flex',
+  },
+  boxDisplay: {
+    display: "flex",
+    height: theme.spacing(8),
   },
   summary: {
     padding: '0 16px',
@@ -65,43 +71,28 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
     )
   })
 
-    if(completedItems.length === 0) {
-      return null;
-    }
-    
-    return (
+  if(completedItems.length === 0) {
+    return null;
+  }
+  
+  return (
     <div className={classes.root}>
       <ExpansionPanel className={classes.panel} expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-        <ExpansionPanelSummary
-          expandIcon={
-            <SvgIcon>
-              <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
-            </SvgIcon>
-          }
-          aria-controls="panel1bh-content"
-          id="panel1bh-header"
-          className={classes.summary}
-        >
-        <FormControlLabel
-            aria-label="Menu"
-            onClick={(event) => event.stopPropagation()}
-            onFocus={(event) => event.stopPropagation()}
-            control={
-              <IconButton 
-              disableFocusRipple
-              size='medium'
-              color='text'
-              aria-haspopup="true"
-              aria-controls="simple-menu"
-              >
-                <SvgIcon  >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 19 21" width="19px" height="19px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                </SvgIcon>
-              </IconButton>
+        <Box className={classes.boxDisplay}>
+          <ExpansionPanelSummary
+            expandIcon={
+              <SvgIcon>
+                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/><path d="M0 0h24v24H0z" fill="none"/></svg>
+              </SvgIcon>
             }
-          />
-          <Typography className={classes.heading}>{completedItems.length} checked off</Typography>
-        </ExpansionPanelSummary>
+            aria-controls="panel1bh-content"
+            id="panel1bh-header"
+            className={classes.summary}
+          >
+            <Typography className={classes.heading}>{completedItems.length} checked off</Typography>
+          </ExpansionPanelSummary>
+          <DeleteOrRecoverCompleted completedItems={completedItems}/>
+        </Box>
         <ExpansionPanelDetails className={classes.details}>
           <List component="li" aria-label="completed items" className={classes.list}>
             {listItems}

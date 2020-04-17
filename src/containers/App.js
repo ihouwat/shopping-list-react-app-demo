@@ -10,7 +10,6 @@ import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDisplay';
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
-import UncategorizedItemSnackbar from '../components/UncategorizedItemSnackbar'
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -54,7 +53,6 @@ class App extends Component {
         {value: 'Black Beans', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
         {value: 'Apples', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
       ],
-      snackbarIsOpen: false, 
       modalIsOpen: false,
       modalItemName: '',
       itemNotes: '',
@@ -69,14 +67,6 @@ class App extends Component {
   }
 
   // Methods
-
-  // Listen for new added items. If the item is uncategorized, it will fire the snackbar 
-  componentDidUpdate(prevProps, prevState) {
-    const uncategorizedItem = this.state.items[this.state.items.length - 1]
-    if(prevState.items !== this.state.items && uncategorizedItem.activatedSnackbarOnce === true) {
-      this.fireUncategorizedSnackbar()
-    } 
-  }
 
   // Generic add grocery method
   addToList = (item) => {
@@ -109,19 +99,6 @@ class App extends Component {
     } else {
       this.state.completedItems.splice( index, 1 );
       this.setState({completedItems: this.state.completedItems});
-    }
-  }
-
-  // Checks for uncategorized items to toggle snackbar warning
-  fireUncategorizedSnackbar = (item) => {
-    if(this.state.category === "Alphabetical" || this.state.category === "Order Entered") {
-      return
-    }
-    else {
-      this.setState({snackbarIsOpen: true})
-      setTimeout(() => {
-        this.setState({snackbarIsOpen: false});
-      }, 4500);
     }
   }
 
@@ -243,7 +220,7 @@ class App extends Component {
   
   // Render
   render () {
-    const { category, modalItemName, favoriteItems, formField, items, completedItems, snackbarIsOpen, itemNotes, modalIsOpen } = this.state;
+    const { category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
@@ -279,6 +256,7 @@ class App extends Component {
                 groceryItems = { items } 
                 completeItem = {this.onCompleteItem}
                 deleteItem = {this.onDeleteItem}
+                items = {items}
               />
             </Box>
             <Box mr={2} ml={2}>
@@ -290,10 +268,6 @@ class App extends Component {
               />
             </Box>
           </Box>
-          {
-            snackbarIsOpen ? <UncategorizedItemSnackbar /> 
-            : undefined
-          }
         </ThemeProvider>
       </div>
     );
