@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 // Import Components
 import SearchArea from '../components/SearchArea';
-import GroceryList from '../components/GroceryList';
+import GroceryLists from '../components/GroceryLists';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
@@ -47,7 +47,7 @@ class App extends Component {
       formField: '',
       items: [],
       completedItems: [],
-      category: 'Alphabetical',
+      category: 'Fresh Thyme',
       favoriteItems: [
         {value: 'Hummus', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
         {value: 'Chocolate Chips', isChecked:false, id: Math.random().toString(36).substr(2, 9),},
@@ -70,12 +70,18 @@ class App extends Component {
 
   // Methods
 
+  // Listen for new added items. If the item is uncategorized, it will fire the snackbar 
+  componentDidUpdate(prevProps, prevState) {
+    const uncategorizedItem = this.state.items[this.state.items.length - 1]
+    if(prevState.items !== this.state.items && uncategorizedItem.activatedSnackbarOnce === true) {
+      this.fireUncategorizedSnackbar()
+    } 
+  }
+
   // Generic add grocery method
   addToList = (item) => {
     // Add item to list
     this.setState({items: this.state.items.concat(item)})
-    // Check if the item has no category
-      this.toggleSnackbar(item)
   }
 
   // Helper method to search for item in a list method - returns the object index
@@ -107,18 +113,15 @@ class App extends Component {
   }
 
   // Checks for uncategorized items to toggle snackbar warning
-  toggleSnackbar = (item) => {
-    console.log(item)
-    if(this.state.category !== "Alphabetical" || this.state.category !== "Order Entered") {
-      if(item.name === "AA" || item.name === "Apples") {
-        this.setState({snackbarIsOpen: true})
-        setTimeout(() => {
-          this.setState({snackbarIsOpen: false});
-        }, 4500);
-      }
-      else {
+  fireUncategorizedSnackbar = (item) => {
+    if(this.state.category === "Alphabetical" || this.state.category === "Order Entered") {
+      return
+    }
+    else {
+      this.setState({snackbarIsOpen: true})
+      setTimeout(() => {
         this.setState({snackbarIsOpen: false});
-      }
+      }, 4500);
     }
   }
 
@@ -264,9 +267,8 @@ class App extends Component {
                 formChange = {this.onFormChange}
                 formSubmit = {this.onFormSubmit}
                 formField = {formField}
-                toggleSnackbar = {this.toggleSnackbar}
               />
-              <GroceryList 
+              <GroceryLists 
                 category = { category }
                 itemNotes = { itemNotes }
                 modalIsOpen = { modalIsOpen }

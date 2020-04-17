@@ -4,7 +4,8 @@ import CategorizedListItems from './CategorizedListItems'
 // Import Material Design UI Components
 
 
-class GroceryList extends Component {
+class GroceryLists extends Component {
+
   render() {
     const {...props} = this.props;
     const {category, groceryItems} = this.props;
@@ -23,4 +24,4 @@ class GroceryList extends Component {
   }
 }
 
-export default GroceryList;
+export default GroceryLists;

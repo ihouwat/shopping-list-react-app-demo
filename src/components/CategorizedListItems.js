@@ -60,7 +60,7 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
         matchedItem.push({
             storeOrder: storeCategory.storeOrder,
             category: storeCategory.category,
-            name: grocery.name
+            name: grocery.name,
           });
         return matchedItem
       }
@@ -102,6 +102,9 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
         // If the new item does not match any known category, push to "Uncategorized Items"
         // Find "Uncategorized Items" index in the store
         let uncategorizedIndex = copiedStore.storeCategories.find(category => category.category === 'Uncategorized Items')
+        // Add new key-value pair to item. This triggers the fireUncategorizedSnackbar() method in App.js
+        // This leads to a snackbar popping up to warn the user the added item is uncategorized
+        tempList[item]['activatedSnackbarOnce'] = true;
         // Push items to the "Uncategorized Items" index
         uncategorizedIndex.items.push(tempList[item])
       }
@@ -142,7 +145,7 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
 })
  
   return (
-    <List>
+    <List component="li" aria-label="grocery list category" className={classes.list}>
       {listItems}
     </List>
   )
