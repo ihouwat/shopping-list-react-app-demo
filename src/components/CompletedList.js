@@ -1,4 +1,5 @@
 import React from 'react';
+import './CompletedList.css';
 import DeleteOrRecoverCompleted from './DeleteOrRecoverCompleted';
 
 // Import Material Design UI Components
@@ -12,14 +13,14 @@ const useStyles = makeStyles((theme) => ({
   panel: {
     boxShadow: 'none',
     backgroundColor: '#fafafa',
-    display: 'flex',
   },
   boxDisplay: {
     display: "flex",
     height: theme.spacing(8),
   },
   summary: {
-    padding: '0 16px',
+    padding: '0 16px 0 0',
+    flexGrow: 1,
   },
   details: {
     padding: '0',
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     color: theme.palette.text.secondary,
+    marginLeft: theme.spacing(3),
   },
   list: {
     width: '100%',
@@ -39,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
+const CompletedList = ({ completedItems, deleteItem, recoverItem, deleteallcompleted, recoverallcompleted }) => {
   //Expansion panel settings from Material-UI
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
@@ -91,7 +93,10 @@ const CompletedList = ({ completedItems, deleteItem, recoverItem }) => {
           >
             <Typography className={classes.heading}>{completedItems.length} checked off</Typography>
           </ExpansionPanelSummary>
-          <DeleteOrRecoverCompleted completedItems={completedItems}/>
+          <DeleteOrRecoverCompleted
+            deleteallcompleted={deleteallcompleted} 
+            recoverallcompleted={recoverallcompleted}
+          />
         </Box>
         <ExpansionPanelDetails className={classes.details}>
           <List component="li" aria-label="completed items" className={classes.list}>

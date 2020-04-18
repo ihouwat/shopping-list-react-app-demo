@@ -180,6 +180,20 @@ class App extends Component {
     this.addToList(item)
   }
 
+  // Remove all completed items from completed List
+  onDeleteAllCompleted = () => {
+    this.setState({completedItems: []})
+  }
+
+    // Readd all completed items to grocery list
+  onRecoverAllCompleted = () => {
+    const completedList = this.state.completedItems;
+    let newItems = [...this.state.items];
+    newItems = newItems.concat(completedList);
+    this.setState({ items: newItems });
+    this.setState({completedItems: []})
+  }
+
    // Modal open method for grocery list component
    // For adding notes to grocery list item
    modalOpen = (item, list) => {
@@ -213,7 +227,7 @@ class App extends Component {
     this.setState({modalIsOpen: false}); // Close modal
   };
 
-  // Category menu handle change
+  // Category menu handle to change category or grocery store
   onCategoryChange = (route) => {
     this.setState({category: route});
   }
@@ -265,6 +279,8 @@ class App extends Component {
                 completedItems = { completedItems }
                 deleteItem = {this.onDeleteItem}
                 recoverItem = {this.onRecoverItem}
+                deleteallcompleted = {this.onDeleteAllCompleted}
+                recoverallcompleted = {this.onRecoverAllCompleted}
               />
             </Box>
           </Box>

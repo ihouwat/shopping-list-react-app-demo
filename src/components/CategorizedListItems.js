@@ -52,17 +52,20 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
 
   // Helper method to search Grocery Store template array for item
   const searchGroceryStoreTemplate = (store, grocery) => {
+    
     for (const storeCategory of store) {
-      if (storeCategory.items.includes(grocery.name)) {
-        // If an item matches one found in the template store, create new array
-        let matchedItem = [];
-        // Matched item array includes an object with store-specific id, category, name 
-        matchedItem.push({
-            storeOrder: storeCategory.storeOrder,
-            category: storeCategory.category,
-            name: grocery.name,
-          });
-        return matchedItem
+      for (let i=0; i<storeCategory.items.length; i++) {
+        if (storeCategory.items[i].toLowerCase().includes(grocery.name.toLowerCase())) {
+          // If an item matches one found in the template store, create new array
+          let matchedItem = [];
+          // Matched item array includes an object with store-specific id, category, name 
+          matchedItem.push({
+              storeOrder: storeCategory.storeOrder,
+              category: storeCategory.category,
+              name: grocery.name,
+            });
+          return matchedItem
+        }
       }
     }
   }

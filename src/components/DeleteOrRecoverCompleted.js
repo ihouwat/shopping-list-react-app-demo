@@ -3,6 +3,9 @@ import { FormControlLabel, makeStyles, Menu, MenuItem, IconButton, SvgIcon } fro
 
 
 const useStyles = makeStyles((theme) => ({
+  delOrRecoverMenu: {
+    marginRight: theme.spacing(-1),
+  },
   menuItem: {
     color: theme.palette.text.secondary,
     display: 'flex',
@@ -12,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DeleteOrRecoverCompleted = ({completedItems}) => {
+const DeleteOrRecoverCompleted = ({deleteallcompleted, recoverallcompleted}) => {
 const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -23,10 +26,6 @@ const classes = useStyles();
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const deleteCompleted = () => {
-    completedItems = [];
-  }
 
   return (
     <Fragment>
@@ -42,6 +41,7 @@ const classes = useStyles();
           aria-haspopup="true"
           aria-controls="simple-menu"
           onClick={handleClick}
+          className={classes.delOrRecoverMenu}
           >
             <SvgIcon>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -1 19 21" width="19px" height="19px"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -58,9 +58,12 @@ const classes = useStyles();
         >
           <MenuItem className={classes.menuItem} onClick={()=> {
             handleClose()
-            deleteCompleted()
+            recoverallcompleted()
             }}>Uncheck all items</MenuItem>
-          <MenuItem className={classes.menuItem} onClick={handleClose}>Delete all checked items</MenuItem>
+            <MenuItem className={classes.menuItem} onClick={()=> {
+            handleClose()
+            deleteallcompleted()
+            }}>Delete all checked items</MenuItem>
         </Menu>
     </Fragment>
   )
