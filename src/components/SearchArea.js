@@ -2,6 +2,7 @@
 import React, { Fragment } from 'react';
 import {TextField, makeStyles} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { groceriesTemplate } from '../groceriesTemplate';
 
 const useStyles = makeStyles((theme) => ({
   input: {
@@ -14,7 +15,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 const SearchArea = ({ formChange,  formSubmit, formField, autocompleteSelectValue, autocompleteField }) => {
+  const [open, setOpen] = React.useState(false);
+  const checkFormField = (event) => {
+    if (formField === '') {
+      setOpen(false)
+    } 
+    else{setOpen(true)}
+  }
+
+  const closeAutocomplete = (event, reason) => {
+    if(reason === "select-option" || reason === "escape"){
+      setOpen(false)
+    }
+  }
+
   const classes = useStyles();  
   return (
     <Fragment>
@@ -23,13 +39,17 @@ const SearchArea = ({ formChange,  formSubmit, formField, autocompleteSelectValu
           id="autocomplete-selector"
           freeSolo
           autoComplete
-          variant="outlined" 
+          autoHighlight
           clearOnEscape
-          selectOnFocus
+          autoSelect
+          variant="outlined" 
           className={classes.input}
-          // value = { autocompleteField }
+          inputValue = { formField }
+          open = {open}
+          onOpen = {checkFormField}
+          onClose = {closeAutocomplete}
           onChange = { autocompleteSelectValue }
-          options={groceries.map((option) => option.name)}
+          options={groceriesTemplate.map((option) => option.name)}
           renderInput={(params) => (
             <TextField {...params}     
               onChange = { formChange }
@@ -50,11 +70,3 @@ const SearchArea = ({ formChange,  formSubmit, formField, autocompleteSelectValu
 }
 
 export default SearchArea
-
-const groceries = [
-  { name: 'Apple', count: 0 },
-  { name: 'Apples', count: 0 },
-  { name: 'Banana', count: 0 },
-  { name: 'Bananas', count: 0 },
-  { name: 'Oatmeal', count: 0 },
-]

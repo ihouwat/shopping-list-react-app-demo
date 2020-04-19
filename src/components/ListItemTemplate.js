@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   listItemText: {
     marginTop: 0,
     marginBottom: 0,
-    height: theme.spacing(9),
+    height: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: theme.spacing(2),

@@ -10,6 +10,7 @@ import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDisplay';
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
+import groceriesTemplate from '../groceriesTemplate';
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -27,7 +28,7 @@ const theme = createMuiTheme({
       main: '#cb0040',
       light: '#fce2e7',
       dark: '#a3003c',
-      contrastText: '#000'
+      contrastText: '#fff'
     },
     text: {
       primary: 'rgba(0, 0, 0, 0.87)',
@@ -44,16 +45,10 @@ class App extends Component {
     super();
     this.state = {
       formField: '',
-      autocompleteField: '',
       items: [],
       completedItems: [],
       category: 'Fresh Thyme',
-      favoriteItems: [
-        {value: 'Hummus', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
-        {value: 'Chocolate Chips', isChecked:false, id: Math.random().toString(36).substr(2, 9),},
-        {value: 'Black Beans', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
-        {value: 'Apples', isChecked: false, id: Math.random().toString(36).substr(2, 9),},
-      ],
+      favoriteItems: [], // This is populated from back-end, see componentDidMount method
       modalIsOpen: false,
       modalItemName: '',
       itemNotes: '',
@@ -68,6 +63,36 @@ class App extends Component {
   }
 
   // Methods
+  // On mount, take sorted grocery list from database and populate this.state.favoriteItems
+  componentDidMount () {
+    //Helper method to sort groceries by count
+    let sortFavorites = (a, b) => {
+      const itemA = a.count;
+      const itemB = b.count;
+      let comparison = 0;
+      if (itemA < itemB) {
+        comparison = 1;
+      } else if (itemA > itemB) {
+        comparison = -1;
+      }
+      return comparison
+    }
+    // Get top ten grocery items by count.
+    // Count number is historical record of how many times each item has been bought
+    const topTenFavorites = groceriesTemplate.sort(sortFavorites).slice(0,10)
+    // Create a new array
+    const favoritesState = []
+    // For each topTen, create an object and push into favoritesState
+    for (let index in topTenFavorites){
+      favoritesState.push({
+        // Grocery name
+        name: topTenFavorites[index].name,
+        // isChecked is false, when it is checked in TopNavigationFaves, it becomes tru
+        isChecked: false,
+      });
+    }
+    this.setState({favoriteItems: favoritesState});
+  }
 
   // Generic add grocery method
   addToList = (item) => {
@@ -108,20 +133,20 @@ class App extends Component {
     this.setState({formField: event.target.value})
   }
 
-  // When selecting item from autocomplete, update formfield
+  // When selecting item from autocomplete, add grocery item
   onAutocompleteSelectValue = (event, value) => {
-    // if (value !== null && this.state.formField !== ""){
-    //  const newItem = {
-    //     'name': value,
-    //     'note': '',
-    //     'id': Math.random().toString(36).substr(2, 9), // unique ID
-    //   } 
-    //   this.addToList(newItem)
-    //   this.setState({formField: ''})
-    //   this.setState({autocompleteField: ''})
-    value = null
-    // } 
-    console.log(value)
+    // If selected value null, nothing happens
+    if (value !== null){
+     const newItem = {
+        'name': value,
+        'note': '',
+        'id': Math.random().toString(36).substr(2, 9), // unique ID
+      }
+      //Add selected value to list
+      this.addToList(newItem)
+      //Empty form
+      this.setState({formField: ''})
+    } 
   }
 
   // Listen to search area input while filling out list item note
@@ -154,16 +179,16 @@ class App extends Component {
     let map = new Set(stateItems.map(el=>el.name.toLowerCase()));
     //Toggle checkbox
     favoriteItems.forEach(item => {
-      if (item.value === event.target.value)
+      if (item.name === event.target.value)
       item.isChecked =  event.target.checked
     })
     
     //Search grocery list and add/remove items accordingly
     favoriteItems.forEach(item => {
-      let faveLowerCase = item.value.toLowerCase()
+      let faveLowerCase = item.name.toLowerCase()
       if(item.isChecked && !map.has(faveLowerCase)) {
         const newItem = {
-          'name': item.value,
+          'name': item.name,
           'note': '',
           'id': Math.random().toString(36).substr(2, 9), // unique ID
         }
@@ -184,6 +209,14 @@ class App extends Component {
   onCompleteItem = (completedItem, groceryList) => {
     this.removeFromList(groceryList, this.searchForItemInList(completedItem, groceryList))
     this.setState({completedItems: this.state.completedItems.concat(completedItem)}); 
+    // When completing item, increment count for matched element the default groceries list
+    // The cound helps determine the favorite items
+    groceriesTemplate.map((el, i) => {
+      if (el.name === completedItem.name) {
+        el.count ++
+      }
+      return groceriesTemplate
+    })
   }
 
   // Fully delete item from whichever list it is in 
@@ -248,10 +281,10 @@ class App extends Component {
   onCategoryChange = (route) => {
     this.setState({category: route});
   }
-  
+
   // Render
   render () {
-    const { autocompleteField, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
+    const { category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
@@ -275,7 +308,6 @@ class App extends Component {
                 formChange = {this.onFormChange}
                 formSubmit = {this.onFormSubmit}
                 formField = {formField}
-                autocompleteField = {autocompleteField}
                 autocompleteSelectValue = {this.onAutocompleteSelectValue}
               />
               <GroceryLists 
@@ -292,7 +324,7 @@ class App extends Component {
                 items = {items}
               />
             </Box>
-            <Box mr={2} ml={2}>
+            <Box mr={2} ml={2} mb={2}>
               { items.length === 0 && completedItems.length === 0 && <EmptyList /> }
               <CompletedList 
                 completedItems = { completedItems }

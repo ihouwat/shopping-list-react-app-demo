@@ -14,7 +14,11 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2),
     width: '100%',
-    maxWidth: 500
+    maxWidth: 375,
+    overflow: "auto",
+  },
+  listItem: {
+    height: theme.spacing(5.5),
   },
 }));
 
@@ -27,9 +31,9 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
     let myObjects = items;
     let map = new Set(myObjects.map(el=>el.name.toLowerCase()));
     favoriteItems.forEach(item => {
-     if(item.isChecked && !map.has(item.value.toLowerCase())) {
+     if(item.isChecked && !map.has(item.name.toLowerCase())) {
          return item.isChecked = false
-        } else if (!item.isChecked && map.has(item.value.toLowerCase())) {
+        } else if (!item.isChecked && map.has(item.name.toLowerCase())) {
           return item.isChecked = true
         } 
     })
@@ -45,20 +49,18 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
 
   const listFavoriteItems  = favoriteItems.map((item, index) => {
     return (
-      <List dense>
-        <ListItem divider key={index}>
-        <ListItemText primary= {item.value}  />
-        <ListItemIcon>
-          <Checkbox 
-            checked = {item.isChecked}
-            key = {item.id}
-            value = {item.value}
-            onClick={faveCheckChildElement}
-            inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
-          />
-        </ListItemIcon>
-        </ListItem>
-      </List>
+      <ListItem dense divider key={index} className={classes.listItem}>
+      <ListItemText primary={item.name}/>
+      <ListItemIcon>
+        <Checkbox 
+          checked = {item.isChecked}
+          key = {item.id}
+          value = {item.name}
+          onClick={faveCheckChildElement}
+          inputProps={{ 'aria-label': 'uncontrolled-checkbox' }}
+        />
+      </ListItemIcon>
+      </ListItem>
   )})
 
   return (
@@ -92,8 +94,10 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <h2 id="transition-modal-title">Favorite Items</h2>
+              <h2 id="transition-modal-title">Top 10 Favorite Items</h2>
+              <List dense disablePadding>
                 {listFavoriteItems}
+              </List>
             </div>
           </Fade>
         </Modal>

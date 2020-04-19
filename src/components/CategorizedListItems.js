@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: 0,
     paddingBottom: 0,
   },
+  '@global': {
+    'li > p:nth-of-type(1)': {
+      borderTop: '0px',
+    },
+  },
 }));
 
 
