@@ -44,6 +44,7 @@ class App extends Component {
     super();
     this.state = {
       formField: '',
+      autocompleteField: '',
       items: [],
       completedItems: [],
       category: 'Fresh Thyme',
@@ -105,6 +106,22 @@ class App extends Component {
   // Listen to search area input for the searchform component
   onFormChange = (event) => {
     this.setState({formField: event.target.value})
+  }
+
+  // When selecting item from autocomplete, update formfield
+  onAutocompleteSelectValue = (event, value) => {
+    // if (value !== null && this.state.formField !== ""){
+    //  const newItem = {
+    //     'name': value,
+    //     'note': '',
+    //     'id': Math.random().toString(36).substr(2, 9), // unique ID
+    //   } 
+    //   this.addToList(newItem)
+    //   this.setState({formField: ''})
+    //   this.setState({autocompleteField: ''})
+    value = null
+    // } 
+    console.log(value)
   }
 
   // Listen to search area input while filling out list item note
@@ -234,7 +251,7 @@ class App extends Component {
   
   // Render
   render () {
-    const { category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
+    const { autocompleteField, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
@@ -258,6 +275,8 @@ class App extends Component {
                 formChange = {this.onFormChange}
                 formSubmit = {this.onFormSubmit}
                 formField = {formField}
+                autocompleteField = {autocompleteField}
+                autocompleteSelectValue = {this.onAutocompleteSelectValue}
               />
               <GroceryLists 
                 category = { category }
