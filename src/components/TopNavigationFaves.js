@@ -69,7 +69,7 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
         <IconButton 
             disableFocusRipple
             size='medium'
-            color='text.disabled'
+            color='default'
             aria-haspopup="true"
             aria-controls="modal-menu"
             onClick={handleOpen}

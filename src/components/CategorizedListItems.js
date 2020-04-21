@@ -12,13 +12,13 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '2em',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
-    paddingTop: theme.spacing(1.8),
-    paddingBottom: theme.spacing(1.8),
+    paddingTop: theme.spacing(2.25),
+    paddingBottom: theme.spacing(2.2),
     textAlign: 'left',
     fontWeight: '700',
-    fontSize: theme.spacing(1.5),
+    fontSize: theme.spacing(1.8125),
     textTransform: 'uppercase',
-    color: theme.palette.text.disabled,
+    color: theme.palette.text.secondary,
   },
   // List styles
   list: {
