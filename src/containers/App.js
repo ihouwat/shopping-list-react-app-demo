@@ -17,11 +17,6 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 // Material Design UI theme
 const theme = createMuiTheme({
-  props: {
-    MuiTypography: {
-      margin: '20px', // No more ripple, on the whole application 💣!
-    }
-  },
   typography: {
     fontFamily: ["'Telex'", 'sans-serif'].join(','),
   },
