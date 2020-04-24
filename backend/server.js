@@ -24,7 +24,8 @@ const db =  {
   ], 
   items: [
     {name: "Apples", note: 'The note', id: 0},
-    {name: "Oranges", note: 'The note', id: 1}
+    {name: "Oranges", note: 'The note', id: 1},
+    { name: 'Flax Seed', note: 'The note', id: 2},
   ],
   completeditems: [
     {name: "Bananas", note: 'The note is here', id: 1}
@@ -73,6 +74,7 @@ const sortedFaves = function (req, res, next) {
 
 app.use(sortedFaves)
 
+
 // Get lists
 app.get('/', (req, res) => {
   res.json({
@@ -82,40 +84,75 @@ app.get('/', (req, res) => {
   })
 });
 
+// Add item to grocery list
 app.put('/additem', (req, res) => {
   db.items.push({
     name: "Oatmeal",
     note: "Don't get quick oatmeal",
-    id: "ba9302jad"
+    id: "ba9302jad",
   })
+  console.log('newItem', db.items[db.items.length - 1])
   res.json({
-    newitem: db.items[db.items.length - 1],
-    updatedlist: db.items,
+    items: db.items,
   })
 });
 
+// Complete item from grocery list
 app.put('/completeitem', (req, res) => {
-  completedItem = "Oranges"
-    for(var i=0; i < db.items.length; i++){
-    if (db.items[i].name === completedItem){
-    console.log(i)
-      // let x = db.items.slice(searchItem, 1)
-      // console.log(x)
-      res.json({
-        items: db.items,
-        completeditems: db.completeditems,
+  completedItem = {name: "Oranges", note: 'The note', id: 1}
+  for(var i=0; i < db.items.length; i++){
+    // Look for a match in items
+    if (db.items[i].name === completedItem.name){
+      // If there is a match, put that item in the completed items list
+      db.completeditems.push({
+        name: db.items[i].name,
+        note: db.items[i].note,
+        id: db.items[i].id,
       })
+      // Remove the item from the items list
+      db.items.splice(i, 1) 
     }
   }
+  for(var j=0; j < db.groceriesTemplate.length; j++) {
+    // Find item in groceriesTemplate constant
+    if(db.groceriesTemplate[j].name === completedItem){
+      // Increase item count, which is used to determine the top ten favorites
+      db.groceriesTemplate[j].count ++
+      console.log(db.groceriesTemplate)
+    }
+  }
+    res.json({
+      items: db.items,
+      completeditems: db.completeditems,
+    })
 });
+
+app.put('/deleteitem', (req, res) => {
+  deleted1 = {name: "Oranges", note: 'The note', id: 1}
+  deletedList = 'items'
+  list = ''
+  deletedList === 'items' ? list = db.items
+  : list = db.completeditems
+  for(var i=0; i < list.length; i++){
+    // Look for a match in items
+    if (db.items[i].name === deleted1.name){
+      // Delete the item from the list
+      console.log('deleteditem', db.items[i])
+      db.items.splice(i, 1) 
+    }
+  }
+  res.json({
+    items: db.items,
+  })
+})
 
 app.listen(port, () => console.log(`app is running http://localhost:${port}`))
 
 /* ROUTES to build
 /DONE getitemslists --> GET = success/fail for items, completed items, and favorites (top 10 count)
 /DONE Add item --> PUT = grocery
+/DONE Complete item -->  DELETE = from items & PUT completed items, PUT item count increased
+/DONE Delete item --> DELETE = from list
 
-/Complete item -->  DELETE = from items & PUT completed items, PUT item count increased
-/Delete item --> DELETE = from list
 /Recover item --> DELETE = from completed items & PUT items
 */
