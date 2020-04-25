@@ -15,23 +15,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
-const SearchArea = ({ formChange,  formSubmit, formField, autocompleteSelectValue, autocompleteField }) => {
-  const [open, setOpen] = React.useState(false);
-  const checkFormField = (event) => {
-    if (formField === '') {
-      setOpen(false)
-    } 
-    else{setOpen(true)}
-  }
-
-  const closeAutocomplete = (event, reason) => {
-    if(reason === "select-option" || reason === "escape"){
-      setOpen(false)
-    }
-  }
-
-  const classes = useStyles();  
+const SearchArea = ({ formChange,  formSubmit, formField, changeAutocomplete, closeAutocomplete, autocompleteIsOpen, checkFormField }) => {
+  const classes = useStyles();
   return (
     <Fragment>
       <form noValidate onSubmit = { formSubmit }>
@@ -45,10 +30,10 @@ const SearchArea = ({ formChange,  formSubmit, formField, autocompleteSelectValu
           variant="outlined" 
           className={classes.input}
           inputValue = { formField }
-          open = {open}
+          open = {autocompleteIsOpen}
           onOpen = {checkFormField}
           onClose = {closeAutocomplete}
-          onChange = { autocompleteSelectValue }
+          onChange = { changeAutocomplete }
           options={groceriesTemplate.map((option) => option.name)}
           renderInput={(params) => (
             <TextField {...params}     

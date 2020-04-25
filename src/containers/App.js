@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 // Import Components
 import SearchArea from '../components/SearchArea';
-import GroceryLists from '../components/GroceryLists';
+import GroceryLists from './GroceryLists';
 import CompletedList from '../components/CompletedList';
 import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
@@ -10,6 +10,7 @@ import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDisplay';
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
+import ErrorBoundary from '../components/ErrorBoundary';
 import groceriesTemplate from '../groceriesTemplate';
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
@@ -55,6 +56,7 @@ class App extends Component {
       modalIsOpen: false,
       modalItemName: '',
       itemNotes: '',
+      autocompleteIsOpen: false,
     }
     this.onCompleteItem = this.onCompleteItem.bind(this);
     this.onDeleteItem = this.onDeleteItem.bind(this);
@@ -63,6 +65,8 @@ class App extends Component {
     this.removeFromList = this.removeFromList.bind(this);
     this.modalClose = this.modalClose.bind(this);
     this.modalOpen = this.modalOpen.bind(this);
+    this.onCloseAutocomplete = this.onCloseAutocomplete.bind(this);
+    this.autocompleteCheckFormField=this.autocompleteCheckFormField.bind(this);
   }
 
   // Methods
@@ -137,20 +141,40 @@ class App extends Component {
   }
 
   // When selecting item from autocomplete, add grocery item
-  onAutocompleteSelectValue = (event, value) => {
+  onChangeAutocomplete = (event, value, reason) => {
     // If selected value null, nothing happens
-    if (value !== null){
-     const newItem = {
-        'name': value,
-        'note': '',
-        'id': Math.random().toString(36).substr(2, 9), // unique ID
-      }
-      //Add selected value to list
-      this.addToList(newItem)
-      //Empty form
+    if (reason === "blur") {
       this.setState({formField: ''})
+      this.setState({autocompleteIsOpen: false})
+      return
+    } else if (value === null ) {
+      return
+    }
+    const newItem = {
+      'name': value,
+      'note': '',
+      'id': Math.random().toString(36).substr(2, 9), // unique ID
+    }
+    //Add selected value to list
+    this.addToList(newItem)
+    //Empty form
+    this.setState({formField: ''})
+  } 
+
+  onCloseAutocomplete = (event, reason) => {
+    if(reason === "escape" || reason === "select-option"){
+      this.setState({autocompleteIsOpen: false})
     } 
+  } 
+
+  autocompleteCheckFormField = (event) => {
+    if (this.state.formField === '') {
+      this.setState({autocompleteIsOpen: false})
+    } 
+    else{this.setState({autocompleteIsOpen: true})
   }
+  }
+
 
   // Listen to search area input while filling out list item note
   onAddNote = (event) => {
@@ -287,57 +311,65 @@ class App extends Component {
 
   // Render
   render () {
-    const { category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
+    const { autocompleteIsOpen, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
         <ThemeProvider theme={theme}>
           <FixedScroll>
             <TopNavigation>
               <TopNavigationTitle/>
-              <TopNavigationCategoryDisplay 
-                category = {category}
-                onCategoryChange = {this.onCategoryChange}
-              />
-              <TopNavigationFaves 
-                items = {items}
-                favoriteItems = {favoriteItems}
-                faveCheckChildElement = {this.faveCheckChildElement}
-              />
+              <ErrorBoundary>
+                <TopNavigationCategoryDisplay 
+                  category = {category}
+                  onCategoryChange = {this.onCategoryChange}
+                />
+                <TopNavigationFaves 
+                  items = {items}
+                  favoriteItems = {favoriteItems}
+                  faveCheckChildElement = {this.faveCheckChildElement}
+                />
+              </ErrorBoundary>
             </TopNavigation>
           </FixedScroll>
-          <Box pt={11} maxWidth={600} mx={'auto'}>
-            <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
-              <SearchArea
-                formChange = {this.onFormChange}
-                formSubmit = {this.onFormSubmit}
-                formField = {formField}
-                autocompleteSelectValue = {this.onAutocompleteSelectValue}
-              />
-              <GroceryLists 
-                category = { category }
-                itemNotes = { itemNotes }
-                modalIsOpen = { modalIsOpen }
-                modalItemName  = { modalItemName }
-                modalClose = { this.modalClose }
-                modalOpen = { this.modalOpen }
-                onAddNote = { this.onAddNote }
-                groceryItems = { items } 
-                completeItem = {this.onCompleteItem}
-                deleteItem = {this.onDeleteItem}
-                items = {items}
-              />
+          <ErrorBoundary>
+            <Box pt={11} maxWidth={600} mx={'auto'}>
+              <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
+                <SearchArea
+                  formChange = {this.onFormChange}
+                  formSubmit = {this.onFormSubmit}
+                  formField = {formField}
+                  autocompleteSelectValue = {this.onAutocompleteSelectValue}
+                  closeAutocomplete = {this.onCloseAutocomplete}
+                  checkFormField = {this.autocompleteCheckFormField}
+                  autocompleteIsOpen = {autocompleteIsOpen}
+                  changeAutocomplete = {this.onChangeAutocomplete}
+                />
+                <GroceryLists 
+                  category = { category }
+                  itemNotes = { itemNotes }
+                  modalIsOpen = { modalIsOpen }
+                  modalItemName  = { modalItemName }
+                  modalClose = { this.modalClose }
+                  modalOpen = { this.modalOpen }
+                  onAddNote = { this.onAddNote }
+                  groceryItems = { items } 
+                  completeItem = {this.onCompleteItem}
+                  deleteItem = {this.onDeleteItem}
+                  items = {items}
+                />
+              </Box>
+              <Box mr={2} ml={2} mb={2}>
+                { items.length === 0 && completedItems.length === 0 && <EmptyList /> }
+                <CompletedList 
+                  completedItems = { completedItems }
+                  deleteItem = {this.onDeleteItem}
+                  recoverItem = {this.onRecoverItem}
+                  deleteallcompleted = {this.onDeleteAllCompleted}
+                  recoverallcompleted = {this.onRecoverAllCompleted}
+                />
+              </Box>
             </Box>
-            <Box mr={2} ml={2} mb={2}>
-              { items.length === 0 && completedItems.length === 0 && <EmptyList /> }
-              <CompletedList 
-                completedItems = { completedItems }
-                deleteItem = {this.onDeleteItem}
-                recoverItem = {this.onRecoverItem}
-                deleteallcompleted = {this.onDeleteAllCompleted}
-                recoverallcompleted = {this.onRecoverAllCompleted}
-              />
-            </Box>
-          </Box>
+          </ErrorBoundary>
         </ThemeProvider>
       </div>
     );

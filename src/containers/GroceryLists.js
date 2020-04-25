@@ -1,6 +1,6 @@
 import React, {Component, Fragment } from 'react';
-import UncategorizedListItems from './UncategorizedListItems'
-import CategorizedListItems from './CategorizedListItems'
+import UncategorizedListItems from '../components/UncategorizedListItems'
+import CategorizedListItems from '../components/CategorizedListItems'
 import UncategorizedItemSnackbar from '../components/UncategorizedItemSnackbar'
 
 
