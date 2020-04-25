@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     width: '100%',
     maxWidth: 375,
+    height: '90vh',
     overflow: "auto",
+  },
+  modalTitle: {
+    marginTop: 0,
   },
   listItem: {
     height: theme.spacing(5.5),
@@ -93,7 +97,7 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
         >
           <Fade in={open}>
             <div className={classes.paper}>
-              <h2 id="transition-modal-title">Top 10 Favorite Items</h2>
+              <h2 id="transition-modal-title" className={classes.modalTitle}>Top 10 Favorite Items</h2>
               <List dense disablePadding>
                 {listFavoriteItems}
               </List>
