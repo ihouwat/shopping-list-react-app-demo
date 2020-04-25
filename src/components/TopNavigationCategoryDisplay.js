@@ -27,6 +27,7 @@ class TopNavigationCategoryDisplay extends Component {
         <IconButton 
             disableFocusRipple
             size='medium'
+            aria-label='pick category'
             aria-haspopup="true"
             aria-controls="simple-menu"
             onClick={this.handleClick}

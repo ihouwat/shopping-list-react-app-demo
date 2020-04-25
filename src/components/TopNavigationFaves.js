@@ -70,8 +70,7 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
           disableFocusRipple
           size='medium'
           color='default'
-          aria-haspopup="true"
-          aria-controls="modal-menu"
+          aria-label='select favorite items'
           onClick={handleOpen}
         >
         <SvgIcon>
@@ -81,8 +80,8 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
       </Fragment>
       <Fragment>
         <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
+          aria-labelledby="favorite items"
+          aria-describedby="pick your top favorite items"
           className={classes.modal}
           open={open}
           onClose={handleClose}

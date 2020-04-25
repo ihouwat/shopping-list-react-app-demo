@@ -330,8 +330,8 @@ class App extends Component {
                 />
               </TopNavigation>
             </FixedScroll>
-            <Box pt={11} maxWidth={600} mx={'auto'}>
-              <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
+            <Box className={'Padding-box'}>
+              <Box className={'Groceries-container'}>
                 <SearchArea
                   formChange = {this.onFormChange}
                   formSubmit = {this.onFormSubmit}
@@ -356,7 +356,7 @@ class App extends Component {
                   items = {items}
                 />
               </Box>
-              <Box mr={2} ml={2} mb={2}>
+              <Box className={'Completed-container'}>
                 { items.length === 0 && completedItems.length === 0 && <EmptyList /> }
                 <CompletedList 
                   completedItems = { completedItems }
