@@ -314,11 +314,11 @@ class App extends Component {
     const { autocompleteIsOpen, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
     return (
       <div className="App">
-        <ThemeProvider theme={theme}>
-          <FixedScroll>
-            <TopNavigation>
-              <TopNavigationTitle/>
-              <ErrorBoundary>
+        <ErrorBoundary>
+          <ThemeProvider theme={theme}>
+            <FixedScroll>
+              <TopNavigation>
+                <TopNavigationTitle/>
                 <TopNavigationCategoryDisplay 
                   category = {category}
                   onCategoryChange = {this.onCategoryChange}
@@ -328,10 +328,8 @@ class App extends Component {
                   favoriteItems = {favoriteItems}
                   faveCheckChildElement = {this.faveCheckChildElement}
                 />
-              </ErrorBoundary>
-            </TopNavigation>
-          </FixedScroll>
-          <ErrorBoundary>
+              </TopNavigation>
+            </FixedScroll>
             <Box pt={11} maxWidth={600} mx={'auto'}>
               <Box mr={2} ml={2} pt={1.5} className={'White-container'}>
                 <SearchArea
@@ -369,8 +367,8 @@ class App extends Component {
                 />
               </Box>
             </Box>
-          </ErrorBoundary>
-        </ThemeProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </div>
     );
   }
