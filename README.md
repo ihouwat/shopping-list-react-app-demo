@@ -68,6 +68,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
 ## Technologies Used 
-* [create-react-app] (https://create-react-app.dev/): To create React application
+* [create-react-app](https://create-react-app.dev/): To create React application
 * material-ui: To create Material Design UI components
 * gh-pages: Deploying site on GitHub pages
