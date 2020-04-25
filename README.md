@@ -69,5 +69,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 ## Technologies Used 
 * [create-react-app](https://create-react-app.dev/): To create React application
-* material-ui: To create Material Design UI components
-* gh-pages: Deploying site on GitHub pages
+* [material-ui](https://material-ui.com/): To create Material Design UI components
+* [gh-pages](https://www.npmjs.com/package/gh-pages): To deploying demo site on GitHub pages
