@@ -123,11 +123,11 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
   // Create a sorted list which will be passed to the mapping array below
   const listToMap = sortedGroceries();
   
-  const listItems = (listToMap.storeCategories).map(category => {
+  const listItems = (listToMap.storeCategories).map((category, index) => {
     return (
-      <Fragment>
+      <Fragment key={index} >
       { category.items.length > 0
-        ? <Typography className = {classes.categoryTitle}>
+        ? <Typography key={index} className = {classes.categoryTitle}>
             {category.category}
           </Typography>
         : null

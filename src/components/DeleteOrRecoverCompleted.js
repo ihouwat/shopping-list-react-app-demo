@@ -37,7 +37,7 @@ const classes = useStyles();
           <IconButton 
           disableFocusRipple
           size='medium'
-          color='text'
+          color='default'
           aria-haspopup="true"
           aria-controls="simple-menu"
           onClick={handleClick}

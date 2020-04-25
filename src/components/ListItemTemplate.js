@@ -49,7 +49,6 @@ const ListItemTemplate = ({index, item, modalClose, modalItemName, modalOpen, de
     <ListItem className={classes.listItem} button key={index}>
         <ListItemText 
           disableTypography
-          multiline
           onClick={modalOpen.bind(this, item)}
           className={classes.listItemText} 
         > 
