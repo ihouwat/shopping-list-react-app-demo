@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {groceryStores} from '../groceryStores';
+import {groceryStores} from '../constants/groceryStores';
 import ListItemTemplate from './ListItemTemplate';
 // Import Material Design UI Components
 import { Typography, makeStyles, List} from '@material-ui/core';

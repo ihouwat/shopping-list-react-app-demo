@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import {Typography, SvgIcon, MenuItem, makeStyles} from '@material-ui/core';
-import {groceryStores} from '../groceryStores';
+import {groceryStores} from '../constants/groceryStores';
 
 const useStyles = makeStyles((theme) => ({
   menuItem: {

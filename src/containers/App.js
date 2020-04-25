@@ -11,7 +11,7 @@ import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDis
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
 import ErrorBoundary from '../components/ErrorBoundary';
-import groceriesTemplate from '../groceriesTemplate';
+import groceriesTemplate from '../constants/groceriesTemplate';
 // Import Material Design UI Custom Theme API
 import {  Box } from '@material-ui/core';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';

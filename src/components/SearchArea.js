@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react';
 import {TextField, makeStyles} from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { groceriesTemplate } from '../groceriesTemplate';
+import { groceriesTemplate } from '../constants/groceriesTemplate';
 
 const useStyles = makeStyles((theme) => ({
   input: {
