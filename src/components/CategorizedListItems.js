@@ -60,7 +60,7 @@ const CategorizedListItems = ({ category, modalItemName, itemNotes, groceryItems
     
     for (const storeCategory of store) {
       for (let i=0; i<storeCategory.items.length; i++) {
-        if (storeCategory.items[i] && grocery && storeCategory.items[i].toLowerCase().includes(grocery.name.toLowerCase())) {
+        if (storeCategory.items[i] && grocery && storeCategory.items[i].toLowerCase() === grocery.name.toLowerCase()) {
           // If an item matches one found in the template store, create new array
           let matchedItem = [];
           // Matched item array includes an object with store-specific id, category, name 

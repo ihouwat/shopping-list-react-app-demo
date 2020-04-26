@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import {Checkbox, IconButton, SvgIcon, Modal, Backdrop, Fade, makeStyles, List, ListItem, ListItemText, ListItemIcon} from '@material-ui/core';
+import "./TopNavigationFaves.css";
 
 // Modal styles
 const useStyles = makeStyles((theme) => ({
@@ -15,8 +16,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     width: '100%',
     maxWidth: 375,
-    height: '90vh',
-    overflow: "auto",
   },
   modalTitle: {
     marginTop: 0,
@@ -96,7 +95,7 @@ const TopNavigationFaves = ({items, faveCheckChildElement, favoriteItems}) => {
           }}
         >
           <Fade in={open}>
-            <div className={classes.paper}>
+            <div className={classes.paper + ' Modal-dimensions'}>
               <h2 id="transition-modal-title" className={classes.modalTitle}>Top 10 Favorite Items</h2>
               <List dense disablePadding>
                 {listFavoriteItems}

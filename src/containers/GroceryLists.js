@@ -15,7 +15,13 @@ class GroceryLists extends Component {
   // Listen for new added items. If the item is uncategorized, it will fire the snackbar 
   componentDidUpdate(prevProps, prevState) {
     const uncategorizedItem = this.props.items[this.props.items.length - 1]
-    if(prevProps.items !== this.props.items && uncategorizedItem.activatedSnackbarOnce === true) {
+    if(prevProps.modalIsOpen !== this.props.modalIsOpen) {
+      // If modal to add item notes opens or closes, do not fire the snackbar
+      // Fixes a bug where if the last item added to the grocery list is uncategorized
+      // The snackbar is always fired
+      return
+    } else if (prevProps.items !== this.props.items && uncategorizedItem.activatedSnackbarOnce === true) {
+      console.log(prevProps.itemNotes)
       this.fireUncategorizedSnackbar()
     } 
   }
@@ -45,7 +51,7 @@ class GroceryLists extends Component {
           }
           {
             snackbarIsOpen ? <UncategorizedItemSnackbar /> 
-            : undefined
+            : null
           }
       </Fragment>
     )
