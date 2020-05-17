@@ -8,46 +8,36 @@ import EmptyList from '../components/EmptyList';
 import TopNavigation from '../components/TopNavigation';
 import TopNavigationTitle from '../components/TopNavigationTitle';
 import TopNavigationCategoryDisplay from '../components/TopNavigationCategoryDisplay';
+import TopNavigationToggleDarkTheme from '../components/TopNavigationToggleDarkTheme';
 import TopNavigationFaves from '../components/TopNavigationFaves';
 import FixedScroll from '../components/FixedScroll';
 import ErrorBoundary from '../components/ErrorBoundary';
+import LoadingScreen from '../components/LoadingScreen';
+import ReloadingMessage from '../components/ReloadingMessage';
 import groceriesTemplate from '../constants/groceriesTemplate';
 // Import Material Design UI Custom Theme API
-import {  Box } from '@material-ui/core';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import {  Box, withStyles } from '@material-ui/core';
 
 // Material Design UI theme
-const theme = createMuiTheme({
-  typography: {
-    fontFamily: ["'Telex'", 'sans-serif'].join(','),
+const styles = theme => ({
+  app: {
+    background: theme.palette.background.default,
+    textAlign: 'center',
+    height: '100%',
   },
-  palette: {
-    primary: {
-      main: '#0040cb',
-      light: '#e7e9fa',
-      dark: '#002bb3',
-      contrastText: '#fff',
-    },
-    secondary: {
-      main: '#cb0040',
-      light: '#fce2e7',
-      dark: '#a3003c',
-      contrastText: '#fff'
-    },
-    text: {
-      primary: 'rgba(0, 0, 0, 0.87)',
-      secondary: 'rgba(0, 0, 0, 0.70)',
-      disabled: 'rgba(0, 0, 0, 0.38)',
-      hint: 'rgba(0, 0, 0, 0.38)'
-    },
+  groceriesContainer: {
+    background: theme.palette.background.paper,
+    borderBottomWidth: '1px',
+    borderBottomStyle: 'solid',
+    borderBottomColor: theme.palette.divider,
   },
-  spacing: 8,
-});
+})
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
+      appIsLoading: window.sessionStorage.getItem("loadStatus") || "first load",
       formField: '',
       items: [],
       completedItems: [],
@@ -98,7 +88,16 @@ class App extends Component {
         isChecked: false,
       });
     }
-    this.setState({favoriteItems: favoritesState});
+    if (this.state.appIsLoading === 'first load') {
+      setTimeout(() => { 
+        this.setState({favoriteItems: favoritesState, appIsLoading: null,}) 
+      }, 4000);
+    } else if (this.state.appIsLoading === 'reloading') {
+      setTimeout(() => { 
+        this.setState({favoriteItems: favoritesState, appIsLoading: null,}) 
+      }, 500)
+    }
+    window.sessionStorage.setItem('loadStatus', 'reloading')
   }
 
   // Generic add grocery method
@@ -311,67 +310,73 @@ class App extends Component {
 
   // Render
   render () {
-    const { autocompleteIsOpen, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen } = this.state;
+    const { classes } = this.props;
+    const { autocompleteIsOpen, category, modalItemName, favoriteItems, formField, items, completedItems, itemNotes, modalIsOpen, appIsLoading } = this.state;
     return (
-      <div className="App">
+      <div className={classes.app}>
         <ErrorBoundary>
-          <ThemeProvider theme={theme}>
-            <FixedScroll>
-              <TopNavigation>
-                <TopNavigationTitle/>
-                <TopNavigationCategoryDisplay 
-                  category = {category}
-                  onCategoryChange = {this.onCategoryChange}
-                />
-                <TopNavigationFaves 
-                  items = {items}
-                  favoriteItems = {favoriteItems}
-                  faveCheckChildElement = {this.faveCheckChildElement}
-                />
-              </TopNavigation>
-            </FixedScroll>
-            <Box className={'Padding-box'}>
-              <Box className={'Groceries-container'}>
-                <SearchArea
-                  formChange = {this.onFormChange}
-                  formSubmit = {this.onFormSubmit}
-                  formField = {formField}
-                  autocompleteSelectValue = {this.onAutocompleteSelectValue}
-                  closeAutocomplete = {this.onCloseAutocomplete}
-                  checkFormField = {this.autocompleteCheckFormField}
-                  autocompleteIsOpen = {autocompleteIsOpen}
-                  changeAutocomplete = {this.onChangeAutocomplete}
-                />
-                <GroceryLists 
-                  category = { category }
-                  itemNotes = { itemNotes }
-                  modalIsOpen = { modalIsOpen }
-                  modalItemName  = { modalItemName }
-                  modalClose = { this.modalClose }
-                  modalOpen = { this.modalOpen }
-                  onAddNote = { this.onAddNote }
-                  groceryItems = { items } 
-                  completeItem = {this.onCompleteItem}
-                  deleteItem = {this.onDeleteItem}
-                  items = {items}
-                />
+          {appIsLoading === "first load" 
+              ? <LoadingScreen />
+              : <>
+              <FixedScroll>
+                <TopNavigation>
+                  <TopNavigationTitle/>
+                  <TopNavigationToggleDarkTheme/>
+                  <TopNavigationCategoryDisplay 
+                    category = {category}
+                    onCategoryChange = {this.onCategoryChange}
+                  />
+                  <TopNavigationFaves 
+                    items = {items}
+                    favoriteItems = {favoriteItems}
+                    faveCheckChildElement = {this.faveCheckChildElement}
+                  />
+                </TopNavigation>
+              </FixedScroll>
+              <Box className={'Padding-box'}>
+                <Box className={`${classes.groceriesContainer} Groceries-container` }>
+                  <SearchArea
+                    formChange = {this.onFormChange}
+                    formSubmit = {this.onFormSubmit}
+                    formField = {formField}
+                    autocompleteSelectValue = {this.onAutocompleteSelectValue}
+                    closeAutocomplete = {this.onCloseAutocomplete}
+                    checkFormField = {this.autocompleteCheckFormField}
+                    autocompleteIsOpen = {autocompleteIsOpen}
+                    changeAutocomplete = {this.onChangeAutocomplete}
+                  />
+                  <GroceryLists 
+                    category = { category }
+                    itemNotes = { itemNotes }
+                    modalIsOpen = { modalIsOpen }
+                    modalItemName  = { modalItemName }
+                    modalClose = { this.modalClose }
+                    modalOpen = { this.modalOpen }
+                    onAddNote = { this.onAddNote }
+                    groceryItems = { items } 
+                    completeItem = {this.onCompleteItem}
+                    deleteItem = {this.onDeleteItem}
+                    items = {items}
+                  />
+                </Box>
+                <Box className={'Completed-container'}>
+                  { items.length === 0 && completedItems.length === 0 && appIsLoading !== "reloading" && <EmptyList /> }
+                  { appIsLoading === "reloading" && <ReloadingMessage /> }                  
+                  <CompletedList 
+                    completedItems = { completedItems }
+                    deleteItem = {this.onDeleteItem}
+                    recoverItem = {this.onRecoverItem}
+                    deleteallcompleted = {this.onDeleteAllCompleted}
+                    recoverallcompleted = {this.onRecoverAllCompleted}
+                  />
+                </Box>
               </Box>
-              <Box className={'Completed-container'}>
-                { items.length === 0 && completedItems.length === 0 && <EmptyList /> }
-                <CompletedList 
-                  completedItems = { completedItems }
-                  deleteItem = {this.onDeleteItem}
-                  recoverItem = {this.onRecoverItem}
-                  deleteallcompleted = {this.onDeleteAllCompleted}
-                  recoverallcompleted = {this.onRecoverAllCompleted}
-                />
-              </Box>
-            </Box>
-          </ThemeProvider>
+            </>
+            }
         </ErrorBoundary>
       </div>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

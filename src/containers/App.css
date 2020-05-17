@@ -1,7 +1,3 @@
-.App {
-  text-align: center;
-}
-
 .Padding-box {
   max-width: 600px;
   margin-left: auto;
@@ -10,8 +6,6 @@
 }
 
 .Groceries-container {
-  background-color: #ffffff;
-  border-bottom: 1px solid #dadce0;
   margin-left: 16px;
   padding-top: 12px;
   margin-right: 16px;
@@ -26,12 +20,12 @@
     padding-top: 64px;
   }
   .Groceries-container {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 4px;
+    margin-right: 4px;
     padding-top: 24px;
   }
   .Completed-container {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 4px;
+    margin-right: 4px;
   }
 }
