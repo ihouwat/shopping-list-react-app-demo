@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/shopping-list-react-app-demo/static/css/main.7599fb63.chunk.css",
+    "main.css": "/shopping-list-react-app-demo/static/css/main.e5d84d5e.chunk.css",
     "main.js": "/shopping-list-react-app-demo/static/js/main.0516341c.chunk.js",
     "main.js.map": "/shopping-list-react-app-demo/static/js/main.0516341c.chunk.js.map",
     "runtime-main.js": "/shopping-list-react-app-demo/static/js/runtime-main.505e4d78.js",
@@ -8,15 +8,15 @@
     "static/js/2.8b41b365.chunk.js": "/shopping-list-react-app-demo/static/js/2.8b41b365.chunk.js",
     "static/js/2.8b41b365.chunk.js.map": "/shopping-list-react-app-demo/static/js/2.8b41b365.chunk.js.map",
     "index.html": "/shopping-list-react-app-demo/index.html",
-    "precache-manifest.34f1d06fd81a76409e32e82133dd2952.js": "/shopping-list-react-app-demo/precache-manifest.34f1d06fd81a76409e32e82133dd2952.js",
+    "precache-manifest.efe8f817c66ef310a82b9c05469f8351.js": "/shopping-list-react-app-demo/precache-manifest.efe8f817c66ef310a82b9c05469f8351.js",
     "service-worker.js": "/shopping-list-react-app-demo/service-worker.js",
-    "static/css/main.7599fb63.chunk.css.map": "/shopping-list-react-app-demo/static/css/main.7599fb63.chunk.css.map",
+    "static/css/main.e5d84d5e.chunk.css.map": "/shopping-list-react-app-demo/static/css/main.e5d84d5e.chunk.css.map",
     "static/js/2.8b41b365.chunk.js.LICENSE.txt": "/shopping-list-react-app-demo/static/js/2.8b41b365.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.505e4d78.js",
     "static/js/2.8b41b365.chunk.js",
-    "static/css/main.7599fb63.chunk.css",
+    "static/css/main.e5d84d5e.chunk.css",
     "static/js/main.0516341c.chunk.js"
   ]
 }
