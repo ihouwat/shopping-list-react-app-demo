@@ -10,4 +10,4 @@ This is just a frontend demo. For a version that includes a server, [go here](ht
 ## Technologies Used 
 * [create-react-app](https://create-react-app.dev/): To create React application
 * [material-ui](https://material-ui.com/): To create Material Design UI components
-* [gh-pages](https://www.npmjs.com/package/gh-pages): To deploying demo site on GitHub pages
+* [gh-pages](https://www.npmjs.com/package/gh-pages): To deploy demo site on GitHub pages
