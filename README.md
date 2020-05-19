@@ -11,9 +11,8 @@ Note: this is just a frontend demo. For a build that includes a server, [go here
 * Customizable grocery stores and store layouts, in JavaScript
 * Click on list items to add notes
 * Fast, accessible progressive web app
-* Top 10 faves list based on usage history 
+* Top 10 faves list based on usage history  (not in demo version)
 * Dark mode, because why not?!
-* Ready to deploy
 * Cute bear to brighten your day (load the app)
 
 ## Technologies Used 
