@@ -7,7 +7,7 @@ We've all visited grocery stores and found ourselves retracing our steps or revi
 
 Note: this is just a frontend demo. For a build that includes a server, [go here](https://github.com/ihouwat/shopping-list-react-app-complete). 
 
-## App Features
+## App Features
 * Customizable grocery stores and store layouts, in JavaScript
 * Click on list items to add notes
 * Fast, accessible progressive web app
