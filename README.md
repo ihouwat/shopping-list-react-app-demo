@@ -7,6 +7,15 @@ We've all visited grocery stores and found ourselves retracing our steps or revi
 
 Note: this is just a frontend demo. For a build that includes a server, [go here](https://github.com/ihouwat/shopping-list-react-app-complete). 
 
+## App Features
+* Customizable grocery stores and store layouts, in JavaScript
+* Click on list items to add notes
+* Fast, accessible progressive web app
+* Top 10 faves list based on usage history 
+* Dark mode, because why not?!
+* Ready to deploy
+* Cute bear to brighten your day (load the app)
+
 ## Technologies Used 
 * [create-react-app](https://create-react-app.dev/): To create React application
 * [material-ui](https://material-ui.com/): To create Material Design UI components
