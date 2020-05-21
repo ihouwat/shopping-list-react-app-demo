@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const ListItemTemplate = ({index, item, modalClose, modalItemName, modalOpen, deleteItem, completeItem, modalIsOpen, itemNotes, onAddNote}) => {
   const classes = useStyles();
   return (
-    <ListItem className={classes.listItem} button key={index}>
+    <ListItem component="li" className={classes.listItem} button key={index}>
         <ListItemText 
           disableTypography
           onClick={modalOpen.bind(this, item)}
