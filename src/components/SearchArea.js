@@ -28,6 +28,7 @@ const SearchArea = ({ formChange,  formSubmit, formField, changeAutocomplete, cl
           clearOnEscape
           autoSelect
           variant="outlined" 
+          closeIcon={false}
           className={classes.input}
           inputValue = { formField }
           open = {autocompleteIsOpen}
