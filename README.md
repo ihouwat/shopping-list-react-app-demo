@@ -9,8 +9,7 @@ Note: this is just a frontend demo. For a build that includes a server, [go here
 
 ## App Features
 * Customizable grocery stores and store layouts, in JavaScript
-* Click on list items to add notes or change count
-* Click on uncategorized list items to map these items to existing store categories
+* Click on list items to add notes
 * Autocomplete search input
 * Fast, accessible progressive web app
 * Top 10 faves list based on usage history  (not in demo version)
